@@ -22,7 +22,7 @@ public class HomeController {
     @GetMapping("/test")
     public Result test(){
         List<Notice> notices = noticeMapper.selectList(null);
-        return Result.success("获取通知信息",notices);
+        return Result.success("获取通知信息","notices");
     }
 
 
