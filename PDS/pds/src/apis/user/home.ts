@@ -7,10 +7,21 @@ interface HomeNotice {
   noticeId: number;
   noticeContent: string;
 }
-
-export function getHomeNotice(): AxiosPromise<HomeNotice> {
+export function getHomeNoticeApi(): AxiosPromise<HomeNotice> {
   return request({
-    url: "/home/test",
+    url: "/home/getnotice",
+    method: "get",
+  });
+}
+
+// 获取产品分类列表
+interface GoodsClassification {
+  goodsClassificationId: number;
+  goodsClassificationName: string;
+}
+export function getGoodsClassificationListApi(): AxiosPromise<GoodsClassification> {
+  return request({
+    url: "/home/getgoodsclassificationlist",
     method: "get",
   });
 }
