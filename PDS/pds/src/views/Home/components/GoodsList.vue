@@ -22,7 +22,14 @@ onMounted(() => {
 
 <template>
   <div class="goods-list">
-    <div class="list" v-for="item in goodsList" :key="item.goodsId">
+    <div
+      class="list"
+      v-for="item in goodsList"
+      :key="item.goodsId"
+      @click="
+        $router.push({ path: '/detail', query: { goodsId: item.goodsId } })
+      "
+    >
       <div class="img">
         <img :src="item.goodsImg" alt="" />
       </div>
@@ -85,10 +92,6 @@ onMounted(() => {
         .old-price {
           text-decoration: line-through;
           color: rgba(0, 0, 0, 0.6);
-        }
-      }
-      .right {
-        .btn {
         }
       }
     }

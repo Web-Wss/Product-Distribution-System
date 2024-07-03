@@ -5,6 +5,7 @@ import {
   getHomeNoticeApi,
 } from "@/apis/user/home";
 import GoodsList from "./components/GoodsList.vue";
+import TabBar from "@/components/TabBar/index.vue";
 // 搜索内容
 const value = ref("");
 
@@ -20,7 +21,7 @@ const getNoticeContent = async () => {
 const active = ref(0);
 // 设置tab值
 const setClassificationValue = (value) => {
-  console.log(value);
+  // console.log(value);
   active.value = value.name;
 };
 
@@ -57,17 +58,18 @@ onMounted(() => {
       v-for="item in goodsClassificationList"
       :title="item.goodsClassificationName"
     >
-      <GoodsList
-        :classificationId="active"
-        style="position: relative; z-index: -99; margin-bottom: 50px"
-      />
+      <GoodsList :classificationId="active" />
     </van-tab>
   </van-tabs>
+
+  <!-- 底部 -->
+  <TabBar />
 </template>
 
 <style scoped lang="scss">
 .home {
   position: sticky;
+  z-index: 1;
   top: 0;
 }
 </style>

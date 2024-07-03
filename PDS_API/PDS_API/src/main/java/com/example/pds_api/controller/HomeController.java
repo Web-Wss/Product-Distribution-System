@@ -11,10 +11,7 @@ import com.example.pds_api.model.GoodsClassification;
 import com.example.pds_api.model.Notice;
 import com.example.pds_api.model.Result;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.sql.Wrapper;
@@ -60,6 +57,13 @@ public class HomeController {
             goodsList = goodsMapper.selectList(wrapper);
         }
         return Result.success("获取产品列表",goodsList);
+    }
+
+//    查询商品详情根据id
+    @PostMapping("/getgoodsdetailbyid")
+    public Result getGoodsDetailById(@RequestParam("goodsId") Integer goodsId){
+        Goods goods = goodsMapper.selectById(goodsId);
+        return Result.success("获取商品详情",goods);
     }
 
 }
