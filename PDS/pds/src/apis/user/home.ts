@@ -25,3 +25,28 @@ export function getGoodsClassificationListApi(): AxiosPromise<GoodsClassificatio
     method: "get",
   });
 }
+
+// 获取产品列表根据分类id
+interface GoodsList {
+  goodsId: number,
+  goodsClassificationId: number,
+  goodsName: string,
+  goodsPrice: number,
+  goodsOldPrice: number,
+  goodsCompany: string,
+  goodsTotalInventory: number,
+  goodsImg: string,
+  goodsVideo: string,
+  goodsStatus: number,
+  createTime: string,
+  isDelete: number
+}
+export function getGoodsListByClassificationIdApi(classificationId: number): AxiosPromise<GoodsList> {
+  return request({
+    url: "/home/getgoodslist",
+    method: "get",
+    params: {
+      classificationId
+    }
+  });
+}

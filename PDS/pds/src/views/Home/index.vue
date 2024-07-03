@@ -4,25 +4,32 @@ import {
   getGoodsClassificationListApi,
   getHomeNoticeApi,
 } from "@/apis/user/home";
-// 获取通知栏信息
-const noticeContent = ref("");
+import GoodsList from "./components/GoodsList.vue";
 // 搜索内容
 const value = ref("");
-// 分类列表选中值
-const active = ref(0);
-const getNoticeContent = () => {
-  getHomeNoticeApi().then((res) => {
-    console.log(res);
+
+// 获取通知栏信息
+const noticeContent = ref("");
+const getNoticeContent = async () => {
+  await getHomeNoticeApi().then((res) => {
     noticeContent.value = res.data.data.noticeContent;
   });
 };
 
+// 分类列表选中值
+const active = ref(0);
+// 设置tab值
+const setClassificationValue = (value) => {
+  console.log(value);
+  active.value = value.name;
+};
+
 // 获取产品分类列表
 const goodsClassificationList = ref([]);
-const getGoodsClassificationList = () => {
-  getGoodsClassificationListApi().then((res) => {
-    console.log(res);
-    goodsClassificationList.value = res.data.data;
+const getGoodsClassificationList = async () => {
+  await getGoodsClassificationListApi().then((res) => {
+    const newRes = [{ goodsClassificationName: "全部" }, ...res.data.data];
+    goodsClassificationList.value = newRes;
   });
 };
 
@@ -40,16 +47,27 @@ onMounted(() => {
     <van-search v-model="value" placeholder="在此搜索烟花" shape="round" />
   </div>
   <!-- 分类 -->
-  <van-tabs v-model:active="active">
+  <van-tabs
+    v-model:active="active"
+    @click-tab="setClassificationValue"
+    offset-top="94"
+    sticky
+  >
     <van-tab
       v-for="item in goodsClassificationList"
       :title="item.goodsClassificationName"
     >
-      内容 {{ 1 }}
+      <GoodsList
+        :classificationId="active"
+        style="position: relative; z-index: -99; margin-bottom: 50px"
+      />
     </van-tab>
   </van-tabs>
 </template>
 
 <style scoped lang="scss">
-@import "./index.scss";
+.home {
+  position: sticky;
+  top: 0;
+}
 </style>

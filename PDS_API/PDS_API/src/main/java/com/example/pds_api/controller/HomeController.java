@@ -1,15 +1,24 @@
 package com.example.pds_api.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.example.pds_api.mapper.GoodsClassificationMapper;
+import com.example.pds_api.mapper.GoodsMapper;
 import com.example.pds_api.mapper.NoticeMapper;
+import com.example.pds_api.model.Goods;
 import com.example.pds_api.model.GoodsClassification;
 import com.example.pds_api.model.Notice;
 import com.example.pds_api.model.Result;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.sql.Wrapper;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -21,6 +30,8 @@ public class HomeController {
     private NoticeMapper noticeMapper;
     @Resource
     private GoodsClassificationMapper goodsClassificationMapper;
+    @Resource
+    private GoodsMapper goodsMapper;
 
 
     //    获取通知栏信息
@@ -34,9 +45,21 @@ public class HomeController {
     @GetMapping("/getgoodsclassificationlist")
     public Result getGoodsClassificationList(){
         List<GoodsClassification> goodsClassifications = goodsClassificationMapper.selectList(null);
-        System.out.println("goodsClassifications:"+goodsClassifications);
         return Result.success("获取产品分类列表",goodsClassifications);
     }
 
+//    获取产品列表
+    @GetMapping("/getgoodslist")
+    public Result getGoodsList(@RequestParam("classificationId") Integer classificationId){
+        List<Goods> goodsList;
+        if (classificationId == 0) {
+            goodsList = goodsMapper.selectList(null);
+        }else{
+            QueryWrapper<Goods> wrapper = new QueryWrapper<>();
+            wrapper.eq("goods_classification_id",classificationId);
+            goodsList = goodsMapper.selectList(wrapper);
+        }
+        return Result.success("获取产品列表",goodsList);
+    }
 
 }
