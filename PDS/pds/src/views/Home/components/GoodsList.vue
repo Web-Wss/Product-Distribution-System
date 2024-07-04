@@ -39,7 +39,7 @@ onMounted(() => {
         <div class="left">
           <div class="price">价格：{{ item.goodsPrice }}元</div>
           <div class="old-price">市场价：{{ item.goodsOldPrice }}元</div>
-          <div class="inventory">库存：{{ item.goodsTotalInventory }}</div>
+          <div class="inventory">剩余库存：{{ item.remainingInventory }}</div>
         </div>
         <div class="right">
           <van-button class="btn" type="success" size="small"
@@ -92,6 +92,9 @@ onMounted(() => {
         .old-price {
           text-decoration: line-through;
           color: rgba(0, 0, 0, 0.6);
+        }
+        .inventory {
+          font-size: 0.8rem;
         }
       }
     }

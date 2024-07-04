@@ -1,3 +1,4 @@
+import storage from "@/utils/storage";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
@@ -14,6 +15,7 @@ export const useUserStore = defineStore("user",()=>{
 
   // 退出时清除用户信息
   const clearUserInfo = () => {
+    storage.removeAll()
     token.value = ""
     userInfo.value = {}
     console.log("用户信息清除了");

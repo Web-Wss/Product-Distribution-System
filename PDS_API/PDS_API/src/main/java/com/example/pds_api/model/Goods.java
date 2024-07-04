@@ -39,4 +39,10 @@ public class Goods {
 
     private Integer isDelete;//是否删除
 
+//    库存字段
+    @TableField(exist = false)
+    private Integer soldQuantity;//已售数量
+    @TableField(exist = false)
+    private Integer remainingInventory;//剩余库存
+
 }

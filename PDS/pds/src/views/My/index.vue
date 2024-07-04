@@ -1,5 +1,17 @@
 <script setup>
 import TabBar from "@/components/TabBar/index.vue";
+import { useUserStore } from "@/store/user";
+import storage from "@/utils/storage";
+
+const userStore = useUserStore();
+// 用户登录信息
+const user = userStore.userInfo;
+const { username, phone } = user;
+
+// 退出登录
+const logout = () => {
+  userStore.clearUserInfo();
+};
 </script>
 
 <template>
@@ -13,8 +25,8 @@ import TabBar from "@/components/TabBar/index.vue";
     </div>
     <van-contact-card
       type="edit"
-      name="user.surname + '（先生/女士）'"
-      tel="user.phone"
+      :name="username + '（先生/女士）'"
+      :tel="phone"
       :editable="false"
     />
     <!-- 我的订单，收货地址 -->
@@ -39,7 +51,9 @@ import TabBar from "@/components/TabBar/index.vue";
 
     <!-- 退出登录 -->
     <div class="logout">
-      <van-button round class="btn" type="danger">退出登录</van-button>
+      <van-button round class="btn" type="danger" @click="logout"
+        >退出登录</van-button
+      >
     </div>
     <!-- 底部 -->
     <TabBar />

@@ -30,7 +30,7 @@ const value = ref(1);
         </div>
         <div class="info">
           <div class="name">星际导弹（每盒四根）</div>
-          <div class="inventory">库存:10</div>
+          <div class="inventory">剩余库存:10</div>
           <div class="price">单价:1</div>
           <div class="smallprice">小计:</div>
         </div>

@@ -11,6 +11,7 @@ import com.example.pds_api.model.GoodsClassification;
 import com.example.pds_api.model.Notice;
 import com.example.pds_api.model.Result;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.SelectProvider;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -50,11 +51,13 @@ public class HomeController {
     public Result getGoodsList(@RequestParam("classificationId") Integer classificationId){
         List<Goods> goodsList;
         if (classificationId == 0) {
-            goodsList = goodsMapper.selectList(null);
+//            goodsList = goodsMapper.selectList(null);
+             goodsList = goodsMapper.selectGoodsWithInventory();
         }else{
-            QueryWrapper<Goods> wrapper = new QueryWrapper<>();
-            wrapper.eq("goods_classification_id",classificationId);
-            goodsList = goodsMapper.selectList(wrapper);
+//            QueryWrapper<Goods> wrapper = new QueryWrapper<>();
+//            wrapper.eq("goods_classification_id",classificationId);
+//            goodsList = goodsMapper.selectList(wrapper);
+            goodsList = goodsMapper.selectGoodsWithInventoryByClassification(classificationId);
         }
         return Result.success("获取产品列表",goodsList);
     }
