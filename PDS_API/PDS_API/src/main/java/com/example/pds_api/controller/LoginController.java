@@ -29,7 +29,7 @@ public class LoginController {
         if (hashMap == null){
             return Result.fail("用户名或密码有误，请重新登录",null);
         }
-        return Result.success("登录成功",hashMap);
+        return Result.success("登录成功!",hashMap);
     }
 
 

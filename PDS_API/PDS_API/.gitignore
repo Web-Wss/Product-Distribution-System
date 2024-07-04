@@ -21,7 +21,6 @@ target/
 *.ipr
 
 ### NetBeans ###
-**/resources/application.yml
 /nbproject/private/
 /nbbuild/
 /dist/
