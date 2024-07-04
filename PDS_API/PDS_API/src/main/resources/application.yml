@@ -4,18 +4,21 @@ spring:
     url: jdbc:mysql://localhost:3306/pds
     username: root
     password: 123456
-
   servlet:
     multipart:
       enabled: true
       max-file-size: -1
       max-request-size: -1
-
-#mybatis:
-#  mapper-locations: classpath:mapper/*.xml
-#  configuration:
-#    map-underscore-to-camel-case: true
-#  type-aliases-package: com.example.pds_api.model
+  redis:
+    host: 124.223.20.251
+    port: 6379
+    password: 123321
+    jedis:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+        max-wait: 100ms
 
 mybatis-plus:
   mapper-locations: classpath:mapper/*.xml

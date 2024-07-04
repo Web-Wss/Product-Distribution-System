@@ -4,6 +4,7 @@ const Home = () => import("@/views/Home/index.vue")
 const Cart = () => import("@/views/Cart/index.vue")
 const My = () => import("@/views/My/index.vue")
 const Detail = () => import("@/views/Detail/index.vue")
+const Login = () => import("@/views/Login/index.vue")
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -37,6 +38,14 @@ const routes: Array<RouteRecordRaw> = [
     component:Detail,
     meta: {
       title: "详情"
+    }
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component:Login,
+    meta: {
+      title: "登录"
     }
   }
 ];
