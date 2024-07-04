@@ -27,7 +27,7 @@ public class LoginController {
     public Result userLogin(@RequestBody LoginDTO loginDTO){
         HashMap<String, Object> hashMap = loginService.userLogin(loginDTO);
         if (hashMap == null){
-            return Result.fail("用户名或密码错误",null);
+            return Result.fail("用户名或密码有误，请重新登录",null);
         }
         return Result.success("登录成功",hashMap);
     }
