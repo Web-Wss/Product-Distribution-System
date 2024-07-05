@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.pds_api.mapper.CartMapper">
+
+<!--   获取购物车列表根据用户id -->
+    <resultMap id="getCartListByUserIdMap" type="Cart">
+        <id property="cartId" column="cart_id"></id>
+        <result property="userId" column="user_id"></result>
+        <result property="goodsId" column="goods_id"></result>
+        <result property="goodsNumber" column="goods_number"></result>
+        <result property="goodsSelectedStatus" column="goods_selected_status"></result>
+        <collection property="goods" ofType="Goods">
+            <id property="goodsId" column="goods_id"></id>
+            <result property="goodsClassificationId" column="goods_classification_id"></result>
+            <result property="goodsName" column="goods_name"></result>
+            <result property="goodsPrice" column="goods_price"></result>
+            <result property="goodsOldPrice" column="goods_old_price"></result>
+            <result property="goodsCompany" column="goods_company"></result>
+            <result property="goodsTotalInventory" column="goods_total_inventory"></result>
+            <result property="goodsImg" column="goods_img"></result>
+            <result property="goodsVideo" column="goods_video"></result>
+            <result property="goodsStatus" column="goods_status"></result>
+            <result property="createTime" column="create_time"></result>
+            <result property="isDelete" column="is_delete"></result>
+            <result property="soldQuantity" column="sold_quantity"></result>
+            <result property="remainingInventory" column="remaining_inventory"></result>
+        </collection>
+    </resultMap>
+    <select id="getCartListByUserId" resultMap="getCartListByUserIdMap">
+        SELECT
+            c.*,
+            g.*,
+            IFNULL(SUM(o.goods_number), 0) AS sold_quantity,
+            g.goods_total_inventory - IFNULL(SUM(o.goods_number), 0) AS remaining_inventory
+        FROM cart c
+                 LEFT JOIN goods g ON c.goods_id = g.goods_id
+                 LEFT JOIN order_list o ON g.goods_id = o.goods_id
+        GROUP BY
+            c.cart_id,
+            g.goods_id,
+            g.goods_total_inventory
+    </select>
+
+
+<!--   Integer getCartTotalPriceByUserId(Integer userId); -->
+    <select id="getCartTotalPriceByUserId" resultType="int">
+        SELECT
+            SUM(CASE WHEN c.goods_selected_status = 1 THEN g.goods_price * c.goods_number ELSE 0 END) AS total_price
+        FROM
+            cart c
+                INNER JOIN
+            goods g ON c.goods_id = g.goods_id
+        WHERE
+            c.goods_selected_status = 1 and c.user_id = #{userId}
+    </select>
+
+
+</mapper>

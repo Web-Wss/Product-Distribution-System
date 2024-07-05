@@ -50,7 +50,7 @@ public interface GoodsMapper extends BaseMapper<Goods> {
             "      WHERE g.goods_id = #{goodsId}\n" +
             "      GROUP BY\n" +
             "      g.goods_id, g.goods_total_inventory")
-    public Goods selectGoodsWithInventoryById(@RequestParam("goodsId")Integer goodsId);
+    Goods selectGoodsWithInventoryById(@RequestParam("goodsId")Integer goodsId);
 
 
 

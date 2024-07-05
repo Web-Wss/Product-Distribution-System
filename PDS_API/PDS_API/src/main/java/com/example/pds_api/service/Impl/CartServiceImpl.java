@@ -8,6 +8,7 @@ import com.example.pds_api.service.CartService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class CartServiceImpl implements CartService {
@@ -50,5 +51,17 @@ public class CartServiceImpl implements CartService {
             integer = cartMapper.insert(cart);
         }
         return integer;
+    }
+
+    @Override
+    public List<Cart> getCartListByUserId(Integer userId) {
+//        获取购物车信息根据用户id，包含商品信息
+        List<Cart> cartListByUserId = cartMapper.getCartListByUserId(userId);
+        return cartListByUserId;
+    }
+
+    @Override
+    public Integer getCartTotalPriceByUserId(Integer userId) {
+        return cartMapper.getCartTotalPriceByUserId(userId);
     }
 }

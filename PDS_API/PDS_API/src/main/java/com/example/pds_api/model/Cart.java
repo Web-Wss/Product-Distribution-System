@@ -23,4 +23,6 @@ public class Cart {
 
     private Integer goodsSelectedStatus;//商品选中状态
 
+    private Goods goods;
+
 }

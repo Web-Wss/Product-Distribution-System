@@ -1,15 +1,41 @@
 <script setup>
+import {
+  getCarListByUserIdApi,
+  getCartTotalPriceByUserIdApi,
+} from "@/apis/user/home";
 import TabBar from "@/components/TabBar/index.vue";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import { useUserStore } from "@/store/user";
 
+const userStore = useUserStore();
 const onSubmit = () => showToast("点击按钮");
+
+// 获取购物车列表根据用户id
+const cartList = ref([]);
+const getCarList = async () => {
+  const res = await getCarListByUserIdApi(userStore.userInfo.userId);
+  console.log(res);
+  cartList.value = res.data.data;
+};
+
+// 计算合计
+const totalPrice = ref(0);
+const getCartTotalPriceByUserId = async () => {
+  const res = await getCartTotalPriceByUserIdApi(userStore.userInfo.userId);
+  totalPrice.value = res.data.data * 100;
+};
 
 // 删除按钮文字
 const deleteText = ref("");
 // 复选框
-const checked = ref(false);
+// const checked = ref(false);
 // 计步器
-const value = ref(1);
+// const value = ref(1);
+
+onMounted(() => {
+  getCarList();
+  getCartTotalPriceByUserId();
+});
 </script>
 
 <template>
@@ -19,24 +45,28 @@ const value = ref(1);
     <div class="content">
       <!-- <van-empty description="亲，购物车是空的哦，请加购您心仪的商品" /> -->
       <!-- 购物车列表 -->
-      <div class="list" v-for="i in 7" key="i">
+      <div class="list" v-for="item in cartList" :key="item.cartId">
         <!-- 复选框 -->
         <div class="check">
-          <van-checkbox v-model="checked"></van-checkbox>
+          <van-checkbox v-model="item.goodsSelectedStatus"></van-checkbox>
         </div>
         <!-- 图片 -->
         <div class="img">
-          <img src="http://ywesc-img.webwss.cn/yh/1.png" alt="" />
+          <img :src="item.goods.goodsImg" alt="" />
         </div>
         <div class="info">
-          <div class="name">星际导弹（每盒四根）</div>
-          <div class="inventory">剩余库存:10</div>
-          <div class="price">单价:1</div>
-          <div class="smallprice">小计:</div>
+          <div class="name">{{ item.goods.goodsName }}</div>
+          <div class="inventory">
+            剩余库存:{{ item.goods.remainingInventory }}
+          </div>
+          <div class="price">单价:{{ item.goods.goodsPrice }}</div>
+          <div class="smallprice">
+            小计:{{ item.goods.goodsPrice * item.goodsNumber }}
+          </div>
         </div>
         <div class="stepper">
           <van-stepper
-            v-model="value"
+            v-model="item.goodsNumber"
             theme="round"
             button-size="22"
             disable-input
@@ -46,7 +76,7 @@ const value = ref(1);
     </div>
 
     <van-submit-bar
-      :price="3050"
+      :price="totalPrice"
       button-text="提交订单"
       @submit="onSubmit"
       tip="若选购商品总价满300及以上，平台将在生成订单时自动进行满减"
@@ -76,8 +106,9 @@ const value = ref(1);
       }
       .img {
         width: 30%;
+        text-align: center;
         img {
-          width: 100%;
+          width: 80%;
         }
       }
       .info {

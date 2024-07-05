@@ -75,3 +75,25 @@ export function addGoodsToCartApi(data: AddGoodsToCart): AxiosPromise<any> {
     data
   });
 }
+
+// 获取购物车列表根据用户id
+export function getCarListByUserIdApi(userId: number): AxiosPromise<any> {
+  return request({
+    url: "/goods/getcartlistbyuserid",
+    method: "POST",
+    params: {
+      userId
+    }
+  });
+}
+
+// 获取购物车总价根据用户id
+export function getCartTotalPriceByUserIdApi(userId: number): AxiosPromise<any> {
+  return request({
+    url: "/goods/getcarttotalpricebyuserid",
+    method: "POST",
+    params: {
+      userId
+    }
+  });
+}
