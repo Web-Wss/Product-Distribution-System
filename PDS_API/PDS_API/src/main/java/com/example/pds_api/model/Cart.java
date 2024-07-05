@@ -1,6 +1,7 @@
 package com.example.pds_api.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,7 @@ public class Cart {
 
     private Integer goodsSelectedStatus;//商品选中状态
 
+    @TableField(exist = false)
     private Goods goods;
 
 }

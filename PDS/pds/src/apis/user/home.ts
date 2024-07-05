@@ -97,3 +97,28 @@ export function getCartTotalPriceByUserIdApi(userId: number): AxiosPromise<any> 
     }
   });
 }
+
+// 修改购物车信息
+interface UpdateCartInfo {
+  cartId: number,
+  goodsNum: number,
+  remainingInventory: number
+}
+export function updateCartInfoApi(data: UpdateCartInfo): AxiosPromise<any> {
+  return request({
+    url: "/goods/updatecartinfo",
+    method: "POST",
+    data
+  });
+}
+
+// 删除购物车信息根据购物车id
+export function deleteCartInfoByCartIdApi(cartId: number): AxiosPromise<any> {
+  return request({
+    url: "/goods/deletecartbycartid",
+    method: "POST",
+    params: {
+      cartId
+    }
+  });
+}

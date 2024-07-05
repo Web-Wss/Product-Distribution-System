@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.pds_api.mapper.CartMapper;
 import com.example.pds_api.model.Cart;
 import com.example.pds_api.model.DTO.AddGoodsToCartDTO;
+import com.example.pds_api.model.DTO.CartDTO;
 import com.example.pds_api.model.Result;
 import com.example.pds_api.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ public class GoodsController {
 
     @Resource
     private CartService cartService;
+    @Resource
+    private CartMapper cartMapper;
 
 //    添加商品到购物车
     @PostMapping("/addgoodstocart")
@@ -46,6 +49,31 @@ public class GoodsController {
         return Result.success(cartTotalPriceByUserId);
     }
 
+//    修改购物车信息
+    @PostMapping("/updatecartinfo")
+    public Result updateCartInfo(@RequestBody CartDTO cartDTO) {
+        QueryWrapper<Cart> queryWrapper = new QueryWrapper<>();
+        Cart cart = new Cart();
+        cart.setGoodsNumber(cartDTO.getGoodsNumber());
+        cart.setGoodsSelectedStatus(cartDTO.getGoodsSelectedStatus());
+        cart.setCartId(cartDTO.getCartId());
+        queryWrapper.eq("cart_id", cartDTO.getCartId());
+        int update = cartMapper.update(cart, queryWrapper);
+        if (update == 1) {
+            return Result.success("修改成功");
+        }
+        return Result.fail("修改失败");
+    }
+
+//    删除购物车根据购物车id
+    @PostMapping("/deletecartbycartid")
+    public Result deleteCartByCartId(@RequestParam("cartId") Integer cartId) {
+        int i = cartMapper.deleteById(cartId);
+        if (i == 1) {
+            return Result.success("删除成功");
+        }
+        return Result.fail("删除失败");
+    }
 
 
 
