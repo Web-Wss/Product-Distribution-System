@@ -60,3 +60,18 @@ export function getGoodsDetailByIdApi(goodsId: number): AxiosPromise<GoodsDetail
     }
   });
 }
+
+// 添加商品到购物车
+interface AddGoodsToCart {
+  userId: number,
+  goodsId:number,
+  goodsNum:number
+  remainingInventory:number
+}
+export function addGoodsToCartApi(data: AddGoodsToCart): AxiosPromise<any> {
+  return request({
+    url: "/goods/addgoodstocart",
+    method: "POST",
+    data
+  });
+}

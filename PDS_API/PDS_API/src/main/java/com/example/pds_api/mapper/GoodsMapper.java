@@ -11,6 +11,7 @@ import java.util.List;
 
 public interface GoodsMapper extends BaseMapper<Goods> {
 
+//    获取商品列表
     @Select("SELECT\n" +
             "\t\tg.*,\n" +
             "    IFNULL(SUM(o.goods_number), 0) AS sold_quantity,\n" +
@@ -23,6 +24,7 @@ public interface GoodsMapper extends BaseMapper<Goods> {
             "   g.goods_id, g.goods_total_inventory;")
     List<Goods> selectGoodsWithInventory();
 
+//    获取商品列表根据分类id
     @Select("  SELECT\n" +
             "    g.*,\n" +
             "    IFNULL(SUM(o.goods_number), 0) AS sold_quantity,\n" +
@@ -35,6 +37,20 @@ public interface GoodsMapper extends BaseMapper<Goods> {
             "    GROUP BY\n" +
             "    g.goods_id, g.goods_total_inventory")
     List<Goods> selectGoodsWithInventoryByClassification(@RequestParam("classificationId")Integer classificationId);
+
+
+//    获取产品详情根据id
+    @Select("SELECT g.*,\n" +
+            "\t\t\tIFNULL(SUM(o.goods_number), 0) AS sold_quantity,\n" +
+            "      g.goods_total_inventory - IFNULL(SUM(o.goods_number), 0) AS remaining_inventory\n" +
+            "      FROM\n" +
+            "      goods g\n" +
+            "      LEFT JOIN\n" +
+            "      order_list o ON g.goods_id = o.goods_id\n" +
+            "      WHERE g.goods_id = #{goodsId}\n" +
+            "      GROUP BY\n" +
+            "      g.goods_id, g.goods_total_inventory")
+    public Goods selectGoodsWithInventoryById(@RequestParam("goodsId")Integer goodsId);
 
 
 

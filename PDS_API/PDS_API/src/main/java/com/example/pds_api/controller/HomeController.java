@@ -65,7 +65,8 @@ public class HomeController {
 //    查询商品详情根据id
     @PostMapping("/getgoodsdetailbyid")
     public Result getGoodsDetailById(@RequestParam("goodsId") Integer goodsId){
-        Goods goods = goodsMapper.selectById(goodsId);
+//        Goods goods = goodsMapper.selectById(goodsId);
+        Goods goods = goodsMapper.selectGoodsWithInventoryById(goodsId);
         return Result.success("获取商品详情",goods);
     }
 

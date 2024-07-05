@@ -12,7 +12,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         WebMvcConfigurer.super.addInterceptors(registry);
         registry.addInterceptor(new JWTInterceptor()).addPathPatterns("/**")
-                .excludePathPatterns("/login/**","/home/**");
+                .excludePathPatterns("/login/**","/home/**","/goods/**");
 
     }
 
