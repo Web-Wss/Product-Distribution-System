@@ -4,10 +4,14 @@ import {
   getGoodsClassificationListApi,
   getHomeNoticeApi,
 } from "@/apis/user/home";
-import GoodsList from "./components/GoodsList.vue";
+import GoodsList from "./components/GoodsList/index.vue";
 import TabBar from "@/components/TabBar/index.vue";
 // 搜索内容
 const value = ref("");
+const searchValue = ref("");
+const onSearch = () => {
+  searchValue.value = value.value;
+};
 
 // 获取通知栏信息
 const noticeContent = ref("");
@@ -45,7 +49,12 @@ onMounted(() => {
     <!-- 通知栏 -->
     <van-notice-bar left-icon="volume-o" :text="noticeContent" />
     <!-- 搜索框 -->
-    <van-search v-model="value" placeholder="在此搜索烟花" shape="round" />
+    <van-search
+      v-model="value"
+      placeholder="在此搜索烟花"
+      shape="round"
+      @search="onSearch"
+    />
   </div>
   <!-- 分类 -->
   <van-tabs
@@ -58,7 +67,7 @@ onMounted(() => {
       v-for="item in goodsClassificationList"
       :title="item.goodsClassificationName"
     >
-      <GoodsList :classificationId="active" />
+      <GoodsList :classificationId="active" :searchValue="searchValue" />
     </van-tab>
   </van-tabs>
 

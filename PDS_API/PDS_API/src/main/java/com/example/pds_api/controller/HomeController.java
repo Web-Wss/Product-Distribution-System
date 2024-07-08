@@ -70,4 +70,15 @@ public class HomeController {
         return Result.success("获取商品详情",goods);
     }
 
+//    搜索商品模糊搜索
+    @PostMapping("/searchgoods")
+    public Result searchGoods(@RequestParam("goodsName") String goodsName){
+        QueryWrapper<Goods> wrapper = new QueryWrapper<>();
+        wrapper.like("goods_name",goodsName);
+        List<Goods> goodsList = goodsMapper.selectList(wrapper);
+        return Result.success("搜索商品",goodsList);
+    }
+
+
+
 }

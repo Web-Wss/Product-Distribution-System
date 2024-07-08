@@ -122,3 +122,42 @@ export function deleteCartInfoByCartIdApi(cartId: number): AxiosPromise<any> {
     }
   });
 }
+
+// 搜索商品，模糊搜索
+export function searchGoodsApi(goodsName: string): AxiosPromise<any> {
+  return request({
+    url: "/home/searchgoods",
+    method: "POST",
+    params: {
+      goodsName
+    }
+  });
+}
+
+// 获取地址列表
+interface AddressList {
+  addressId: number;
+  userId: number;
+  addressInfo: string;
+  contacts: string;
+  phone: string;
+  isDefault: number;
+}
+export function getAddressListApi(userId:number): AxiosPromise<AddressList> {
+  return request({
+    url: "/user/getaddresslist",
+    method: "GET",
+    params: {
+      userId
+    }
+  });
+}
+
+// 新增地址
+export function addAddressApi(data:object): AxiosPromise<any> {
+  return request({
+    url: "/user/addaddressinfo",
+    method: "POST",
+    data
+  });
+}

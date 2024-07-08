@@ -6,6 +6,8 @@ const My = () => import("@/views/My/index.vue")
 const Detail = () => import("@/views/Detail/index.vue")
 const Login = () => import("@/views/Login/index.vue")
 
+const Address = () => import("@/views/Home/components/Address/index.vue")
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
@@ -30,6 +32,14 @@ const routes: Array<RouteRecordRaw> = [
     component:My,
     meta: {
       title: "我的"
+    }
+  },
+  {
+    path: "/address",
+    name: "Address",
+    component:Address,
+    meta: {
+      title: "地址管理"
     }
   },
   {

@@ -22,7 +22,7 @@ const deleteText = ref("");
 const cartList = ref([]);
 const getCarList = async () => {
   const res = await getCarListByUserIdApi(userStore.userInfo.userId);
-  console.log(res);
+  // console.log(res);
   cartList.value = res.data.data;
   // 遍历购物车列表，判断是否有勾选
   deleteText.value = "";

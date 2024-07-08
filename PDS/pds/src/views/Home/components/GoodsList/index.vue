@@ -1,24 +1,47 @@
 <script setup>
-import { defineProps, ref, onMounted } from "vue";
+import { defineProps, ref, onMounted, watchEffect, watch } from "vue";
 import { useUserStore } from "@/store/user";
 import {
   getGoodsListByClassificationIdApi,
   addGoodsToCartApi,
+  searchGoodsApi,
 } from "@/apis/user/home";
+// lodash
+import { debounce } from "lodash";
 
 const userStore = useUserStore();
 
-const classificationId = defineProps(["classificationId"]);
+const props = defineProps(["classificationId", "searchValue"]);
+
+// 搜索
+const performSearch = (searchValue) => {
+  console.log("子组件执行搜索", searchValue);
+  searchGoodsApi(searchValue).then((res) => {
+    // console.log(res);
+    goodsList.value = res.data.data;
+  });
+};
+// watchEffect(() => {
+//   const { searchValue } = props; // 显式解构，虽然在这里不是必须的，但有助于理解哪些是依赖项
+//   performSearch(searchValue); // 执行搜索逻辑
+// });
+watch(
+  () => props.searchValue,
+  (newValue) => {
+    performSearch(newValue); // 当 searchValue 变化时执行搜索逻辑
+  },
+  { immediate: false } // 设定 immediate 为 false 来阻止初始执行
+);
 
 // 获取产品列表根据分类id
 const goodsList = ref([]);
 const getGoodsList = async () => {
-  await getGoodsListByClassificationIdApi(
-    classificationId.classificationId
-  ).then((res) => {
-    // console.log(res);
-    goodsList.value = res.data.data;
-  });
+  await getGoodsListByClassificationIdApi(props.classificationId).then(
+    (res) => {
+      // console.log(res);
+      goodsList.value = res.data.data;
+    }
+  );
 };
 
 // 加购面板

@@ -2,6 +2,7 @@
 import TabBar from "@/components/TabBar/index.vue";
 import { useUserStore } from "@/store/user";
 import storage from "@/utils/storage";
+import { ref } from "vue";
 
 const userStore = useUserStore();
 // 用户登录信息
@@ -36,18 +37,17 @@ const logout = () => {
         <van-icon name="arrow" class="search-icon" />
       </template>
     </van-cell>
-    <van-cell title="收货地址" icon="logistics">
+    <van-cell title="收货地址" icon="logistics" to="address">
       <!-- 使用 right-icon 插槽来自定义右侧图标 -->
       <template #right-icon>
         <van-icon name="arrow" class="search-icon" />
       </template>
     </van-cell>
-    <van-cell title="意见反馈" icon="comment-o">
-      <!-- 使用 right-icon 插槽来自定义右侧图标 -->
+    <!-- <van-cell title="意见反馈" icon="comment-o">
       <template #right-icon>
         <van-icon name="arrow" class="search-icon" />
       </template>
-    </van-cell>
+    </van-cell> -->
 
     <!-- 退出登录 -->
     <div class="logout">
