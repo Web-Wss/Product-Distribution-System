@@ -179,3 +179,21 @@ export function deleteAddressApi(addressId:number): AxiosPromise<any> {
     params: { addressId }
   });
 }
+
+// 获取我的订单列表根据参数
+export function getOrderListApi(userId:number,orderStatus:number): AxiosPromise<any> {
+  return request({
+    url: "/user/getmyorderlistbyparam",
+    method: "POST",
+    params: { userId,orderStatus }
+  });
+}
+
+// 获取订单详情根据订单id
+export function getOrderDetailApi(ordersId:number): AxiosPromise<any> {
+  return request({
+    url: "/user/getorderdetailbyorderid",
+    method: "POST",
+    params: { ordersId }
+  });
+}

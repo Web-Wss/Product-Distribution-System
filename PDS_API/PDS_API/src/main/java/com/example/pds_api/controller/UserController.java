@@ -2,10 +2,13 @@ package com.example.pds_api.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.pds_api.mapper.AddressMapper;
+import com.example.pds_api.mapper.OrdersMapper;
 import com.example.pds_api.model.Address;
 import com.example.pds_api.model.DTO.AddressDTO;
+import com.example.pds_api.model.OrderList;
+import com.example.pds_api.model.Orders;
 import com.example.pds_api.model.Result;
-import org.apache.ibatis.annotations.Param;
+import com.example.pds_api.service.OrderService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -17,6 +20,11 @@ public class UserController {
 
     @Resource
     private AddressMapper addressMapper;
+    @Resource
+    private OrdersMapper ordersMapper;
+    @Resource
+    private OrderService orderService;
+
 
 //    获取地址列表
     @GetMapping("/getaddresslist")
@@ -82,5 +90,32 @@ public class UserController {
             return Result.fail("删除地址信息失败",delete);
         }
     }
+
+//    获取我的订单列表根据条件查询
+    @PostMapping("/getmyorderlistbyparam")
+    public Result getMyOrderListByParam(@RequestParam("userId")Integer userId,
+                                        @RequestParam("orderStatus")Integer orderStatus){
+//        判断是否带参，带参根据带参查询，不带参查询全部
+        if (orderStatus == 0){
+            QueryWrapper<Orders> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("user_id",userId);
+            List<Orders> orders = ordersMapper.selectList(queryWrapper);
+            return Result.success("获取我的订单列表成功",orders);
+        }else{
+            QueryWrapper<Orders> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("user_id",userId)
+                    .eq("order_status",orderStatus);
+            List<Orders> orders = ordersMapper.selectList(queryWrapper);
+            return Result.success("获取我的订单列表成功",orders);
+        }
+    }
+
+//    获取订单详情根据订单id
+    @PostMapping("/getorderdetailbyorderid")
+    public Result getOrderDetailByOrderId(@RequestParam("ordersId")Integer ordersId){
+        OrderList orderListByOrderId = orderService.getOrderListByOrderId(ordersId);
+        return Result.success("获取订单详情成功",orderListByOrderId);
+    }
+
 
 }

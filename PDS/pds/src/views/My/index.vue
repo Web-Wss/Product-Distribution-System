@@ -31,7 +31,7 @@ const logout = () => {
       :editable="false"
     />
     <!-- 我的订单，收货地址 -->
-    <van-cell title="我的订单" icon="orders-o" to="myorder">
+    <van-cell title="我的订单" icon="orders-o" to="order">
       <!-- 使用 right-icon 插槽来自定义右侧图标 -->
       <template #right-icon>
         <van-icon name="arrow" class="search-icon" />

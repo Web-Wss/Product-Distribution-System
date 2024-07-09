@@ -33,11 +33,14 @@ declare module 'vue' {
     VanNoticeBar: typeof import('vant/es')['NoticeBar']
     VanRow: typeof import('vant/es')['Row']
     VanSearch: typeof import('vant/es')['Search']
+    VanStep: typeof import('vant/es')['Step']
     VanStepper: typeof import('vant/es')['Stepper']
+    VanSteps: typeof import('vant/es')['Steps']
     VanSubmitBar: typeof import('vant/es')['SubmitBar']
     VanTab: typeof import('vant/es')['Tab']
     VanTabbar: typeof import('vant/es')['Tabbar']
     VanTabbarItem: typeof import('vant/es')['TabbarItem']
     VanTabs: typeof import('vant/es')['Tabs']
+    VanTag: typeof import('vant/es')['Tag']
   }
 }

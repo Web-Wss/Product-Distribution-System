@@ -5,9 +5,9 @@ const Cart = () => import("@/views/Cart/index.vue")
 const My = () => import("@/views/My/index.vue")
 const Detail = () => import("@/views/Detail/index.vue")
 const Login = () => import("@/views/Login/index.vue")
-
-const Address = () => import("@/views/Home/components/Address/index.vue")
-
+const Address = () => import("@/views/My/components/Address/index.vue")
+const Order = () => import("@/views/My/components/Order/index.vue")
+const OrderDetail = () => import("@/views/My/components/OrderDetail/index.vue")
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
@@ -40,6 +40,22 @@ const routes: Array<RouteRecordRaw> = [
     component:Address,
     meta: {
       title: "地址管理"
+    }
+  },
+  {
+    path: "/order",
+    name: "Order",
+    component:Order,
+    meta: {
+      title: "我的订单"
+    }
+  },
+  {
+    path: "/orderDetail",
+    name: "OrderDetail",
+    component:OrderDetail,
+    meta: {
+      title: "订单详情"
     }
   },
   {
