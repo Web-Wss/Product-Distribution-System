@@ -1,5 +1,10 @@
 <script setup>
-import { getAddressListApi, addAddressApi } from "@/apis/user/home";
+import {
+  getAddressListApi,
+  addAddressApi,
+  editAddressApi,
+  deleteAddressApi,
+} from "@/apis/user/home";
 import { onMounted, ref } from "vue";
 import { useUserStore } from "@/store/user";
 
@@ -57,6 +62,61 @@ const addAddressBtn = async () => {
   }
 };
 
+// 编辑地址信息
+const editAddress = ref({
+  userId: 0,
+  addressId: 0,
+  contacts: "",
+  phone: "",
+  address: "",
+  isDefault: 0,
+});
+const show1 = ref(false);
+const onEdit = (item, index) => {
+  console.log(item);
+  editAddress.value.addressId = item.id;
+  editAddress.value.contacts = item.name;
+  editAddress.value.phone = item.tel;
+  editAddress.value.address = item.address;
+  editAddress.value.isDefault = 0;
+  show1.value = true;
+};
+const editAddressBtn = async () => {
+  console.log(editAddress.value);
+  const res = await editAddressApi(editAddress.value);
+  if (res.data.code == 200) {
+    showNotify({ type: "success", message: res.data.msg });
+    getAddressList();
+    show1.value = false;
+  }
+};
+
+// 修改默认地址
+const onSelect = async (item) => {
+  editAddress.value.userId = userStore.userInfo.userId;
+  editAddress.value.addressId = item.id;
+  editAddress.value.contacts = item.name;
+  editAddress.value.phone = item.tel;
+  editAddress.value.address = item.address;
+  editAddress.value.isDefault = 1;
+  const res = await editAddressApi(editAddress.value);
+  if (res.data.code == 200) {
+    showNotify({ type: "success", message: res.data.msg });
+    getAddressList();
+    show1.value = false;
+  }
+};
+
+// 删除地址信息
+const deleteAddress = async () => {
+  const res = await deleteAddressApi(editAddress.value.addressId);
+  if (res.data.code == 200) {
+    showNotify({ type: "success", message: res.data.msg });
+    getAddressList();
+    show1.value = false;
+  }
+};
+
 onMounted(() => {
   getAddressList();
 });
@@ -65,8 +125,6 @@ onMounted(() => {
 const onClickLeft = () => history.back();
 
 const chosenAddressId = ref(2);
-
-const onEdit = (item, index) => showToast("编辑地址:" + index);
 </script>
 
 <template>
@@ -85,6 +143,7 @@ const onEdit = (item, index) => showToast("编辑地址:" + index);
     default-tag-text="默认"
     @add="onAdd"
     @edit="onEdit"
+    @select="onSelect"
   />
 
   <!-- 新增地址弹框 -->
@@ -115,6 +174,46 @@ const onEdit = (item, index) => showToast("编辑地址:" + index);
         placeholder="请输入收货地址"
       />
     </van-cell-group>
+  </van-dialog>
+
+  <!-- 编辑地址信息 -->
+  <van-dialog
+    v-model:show="show1"
+    title="编辑地址"
+    show-cancel-button
+    confirmButtonText="修改"
+    @confirm="editAddressBtn"
+  >
+    <van-cell-group inset>
+      <van-field
+        required
+        v-model="editAddress.contacts"
+        label="联系人"
+        placeholder="请输入联系人"
+      />
+      <van-field
+        required
+        v-model="editAddress.phone"
+        label="联系方式"
+        placeholder="请输入联系方式"
+      />
+      <van-field
+        required
+        v-model="editAddress.address"
+        label="收货地址"
+        placeholder="请输入收货地址"
+      />
+    </van-cell-group>
+    <!-- 删除按钮 -->
+    <div class="button" style="text-align: center">
+      <van-button
+        type="danger"
+        size="small"
+        style="margin-top: 10px"
+        @click="deleteAddress"
+        >删除</van-button
+      >
+    </div>
   </van-dialog>
 </template>
 

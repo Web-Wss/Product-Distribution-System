@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @Data
 public class AddressDTO {
 
+    private Integer addressId;//地址id
+
     private Integer userId;//用户id
 
     private String addressInfo;//地址信息

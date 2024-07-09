@@ -161,3 +161,21 @@ export function addAddressApi(data:object): AxiosPromise<any> {
     data
   });
 }
+
+// 编辑地址信息
+export function editAddressApi(data:object): AxiosPromise<any> {
+  return request({
+    url: "/user/updateaddressinfo",
+    method: "POST",
+    data
+  });
+}
+
+// 删除地址信息
+export function deleteAddressApi(addressId:number): AxiosPromise<any> {
+  return request({
+    url: "/user/deleteaddressinfo",
+    method: "POST",
+    params: { addressId }
+  });
+}
