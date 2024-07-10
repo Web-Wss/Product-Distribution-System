@@ -21,7 +21,6 @@
             <result property="contacts" column="contacts"></result>
             <result property="phone" column="phone"></result>
             <result property="isDefault" column="is_default"></result>
-
         </collection>
         <collection property="orders" ofType="Orders">
             <id property="ordersId" column="orders_id"></id>

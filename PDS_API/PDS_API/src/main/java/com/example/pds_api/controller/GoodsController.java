@@ -1,16 +1,18 @@
 package com.example.pds_api.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.example.pds_api.mapper.CartMapper;
-import com.example.pds_api.model.Cart;
+import com.example.pds_api.mapper.*;
+import com.example.pds_api.model.*;
 import com.example.pds_api.model.DTO.AddGoodsToCartDTO;
 import com.example.pds_api.model.DTO.CartDTO;
-import com.example.pds_api.model.Result;
+import com.example.pds_api.model.DTO.GenerateOrderDTO;
 import com.example.pds_api.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -22,6 +24,14 @@ public class GoodsController {
     private CartService cartService;
     @Resource
     private CartMapper cartMapper;
+    @Resource
+    private AddressMapper addressMapper;
+    @Resource
+    private ReductionMapper reductionMapper;
+    @Resource
+    private OrdersMapper ordersMapper;
+    @Resource
+    private OrderListMapper orderListMapper;
 
 //    添加商品到购物车
     @PostMapping("/addgoodstocart")
@@ -76,7 +86,73 @@ public class GoodsController {
     }
 
 
+//    获取生成订单信息根据用户id
+    @PostMapping("/getcartlistbyuseridandselectedstatus")
+    public Result getCartListByUserIdAndSelectedStatus(@RequestParam("userId") Integer userId) {
+        HashMap<String, Object> map = new HashMap<>();
+        Address address = new Address();
+//        获取订单商品列表
+        List<Cart> carts = cartService.getCartListByUserIdAndSelectedStatus(userId);
+//        获取订单金额
+        Integer cartTotalPriceByUserId = cartService.getCartTotalPriceByUserId(userId);
+//        获取默认收获地址id和信息
+        address = addressMapper.selectOne(new QueryWrapper<Address>().eq("user_id",userId).eq("is_default",1));
+        map.put("orderGoodsList",carts);
+        map.put("orderTotalPrice",cartTotalPriceByUserId);
+        map.put("address",address);
+        return Result.success("生成订单信息",map);
+    }
 
+//    获取满减规则列表
+    @GetMapping("/getreductionlist")
+    public Result getReductionList() {
+        List<Reduction> reductions = reductionMapper.selectList(null);
+        return Result.success("获取满减规则列表",reductions);
+    }
+
+
+//    生成订单
+    @PostMapping("/generateorder")
+    public Result generateOrder(@RequestBody GenerateOrderDTO generateOrderDTO) {
+//        设置订单信息
+        Orders orders = new Orders();
+        Integer ordersId;
+        Integer IsOk = null;
+        orders.setUserId(generateOrderDTO.getUserId());
+        orders.setAddressId(generateOrderDTO.getAddressId());
+        orders.setOrderTotalPrice(generateOrderDTO.getOrderTotalPrice());
+        orders.setOrderDiscountPrice(generateOrderDTO.getOrderDiscountPrice());
+        orders.setOrderActualPayment(generateOrderDTO.getOrderActualPayment());
+        orders.setOrderRemarks(generateOrderDTO.getRemark());
+        orders.setDistributorId(generateOrderDTO.getDistributorId());
+        System.out.println(orders);
+        int insert = ordersMapper.insert(orders);
+        if (insert == 1) {
+            ordersId = orders.getOrdersId();
+        }else {
+            return Result.fail("生成订单失败");
+        }
+//        设置订单列表信息
+        OrderList orderList = new OrderList();
+        for (Cart cart : generateOrderDTO.getOrderGoodsList()) {
+            orderList.setOrdersId(ordersId);
+            orderList.setGoodsId(cart.getGoodsId());
+            orderList.setGoodsPrice(cart.getGoods().getGoodsPrice());
+            orderList.setGoodsNumber(cart.getGoodsNumber());
+            orderList.setPriceSubtotal(cart.getGoods().getGoodsPrice().multiply(new BigDecimal(cart.getGoodsNumber())));
+            IsOk = orderListMapper.insert(orderList);
+        }
+//        删除购物车已勾选的信息根据用户id
+        if (IsOk == 1){
+            int delete = cartMapper.delete(new QueryWrapper<Cart>().eq("user_id", generateOrderDTO.getUserId()).eq("goods_selected_status", 1));
+            if (delete == 1) {
+                return Result.success("生成订单成功");
+            }
+        }else {
+            return Result.fail("生成订单失败");
+        }
+        return Result.success("生成订单成功");
+    }
 
 
 

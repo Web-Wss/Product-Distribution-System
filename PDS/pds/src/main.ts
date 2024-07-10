@@ -6,7 +6,7 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 // 路由
 import router from "@/router/index"
 import { createPinia } from 'pinia'
- 
+
 const app = createApp(App)
 const pinia = createPinia()
 app.use(pinia)

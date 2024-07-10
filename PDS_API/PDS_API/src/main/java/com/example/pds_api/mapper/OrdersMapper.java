@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.pds_api.model.OrderList;
 import com.example.pds_api.model.Orders;
 
+import java.util.List;
+
 public interface OrdersMapper extends BaseMapper<Orders> {
 
-    OrderList getOrderListByOrderId(Integer ordersId);
+    List<OrderList> getOrderListByOrderId(Integer ordersId);
 
 }

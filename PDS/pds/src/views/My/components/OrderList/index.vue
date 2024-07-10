@@ -25,20 +25,20 @@ const goDetail = (e) => {
 <template>
   <div class="order-list">
     <div class="item" v-for="(item, index) in orderList" :key="index">
-      <div class="order-id">订单号:{{ item.addressId }}</div>
+      <div class="order-id">订单号:{{ item.ordersId }}</div>
       <div class="content">
         <div class="left">
           <div class="li createtime">
             <b>下单时间:</b><span>{{ item.orderCreateTime }}</span>
           </div>
           <div class="li total-price">
-            <b>实际金额:</b><span>{{ item.orderTotalPrice }}</span>
+            <b>实际金额:</b><span>{{ item.orderTotalPrice }}元</span>
           </div>
           <div class="li discount-price">
-            <b>优惠金额:</b><span>{{ item.orderDiscountPrice }}</span>
+            <b>优惠金额:</b><span>{{ item.orderDiscountPrice }}元</span>
           </div>
           <div class="li actual">
-            <b>实付金额:</b><span>{{ item.orderActualPayment }}</span>
+            <b>实付金额:</b><span>{{ item.orderActualPayment }}元</span>
           </div>
           <div class="li status">
             <b>订单状态:</b><span>{{ orderStatus[item.orderStatus - 1] }}</span>

@@ -8,15 +8,21 @@ import {
 import TabBar from "@/components/TabBar/index.vue";
 import { onMounted, ref } from "vue";
 import { useUserStore } from "@/store/user";
+import { useRouter } from "vue-router";
 
 // lodash
 import { debounce } from "lodash";
 
 const userStore = useUserStore();
-const onSubmit = () => showToast("点击按钮");
+const router = useRouter();
+const onSubmit = () => {
+  router.push("/publishOrder");
+};
 
 // 删除按钮文字
 const deleteText = ref("");
+// 提交订单按钮是否可以点击
+const submitBtn = ref(true);
 
 // 获取购物车列表根据用户id
 const cartList = ref([]);
@@ -26,9 +32,12 @@ const getCarList = async () => {
   cartList.value = res.data.data;
   // 遍历购物车列表，判断是否有勾选
   deleteText.value = "";
+  submitBtn.value = true;
+
   cartList.value.forEach((item) => {
     if (item.goodsSelectedStatus == 1) {
       deleteText.value = "删除已勾选的商品";
+      submitBtn.value = false;
     }
   });
 };
@@ -112,6 +121,7 @@ const deleteCartInfoByCartId = () => {
     setTimeout(() => {
       getCartTotalPriceByUserId();
       getCarList();
+      loading.value = 1000;
     }, 200);
   });
 };
@@ -175,7 +185,8 @@ onMounted(() => {
       :price="totalPrice"
       button-text="提交订单"
       @submit="onSubmit"
-      tip="若选购商品总价满300及以上，平台将在生成订单时自动进行满减"
+      :disabled="submitBtn"
+      tip="平台优惠活动在订单生成后自动进行"
     />
   </div>
   <!-- 底部 -->

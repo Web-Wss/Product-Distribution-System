@@ -98,13 +98,15 @@ public class UserController {
 //        判断是否带参，带参根据带参查询，不带参查询全部
         if (orderStatus == 0){
             QueryWrapper<Orders> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("user_id",userId);
-            List<Orders> orders = ordersMapper.selectList(queryWrapper);
+            queryWrapper.eq("user_id",userId)
+                    .orderByDesc("order_create_time");
+             List<Orders> orders = ordersMapper.selectList(queryWrapper);
             return Result.success("获取我的订单列表成功",orders);
         }else{
             QueryWrapper<Orders> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("user_id",userId)
-                    .eq("order_status",orderStatus);
+                    .eq("order_status",orderStatus)
+                    .orderByDesc("order_create_time");
             List<Orders> orders = ordersMapper.selectList(queryWrapper);
             return Result.success("获取我的订单列表成功",orders);
         }
@@ -113,9 +115,11 @@ public class UserController {
 //    获取订单详情根据订单id
     @PostMapping("/getorderdetailbyorderid")
     public Result getOrderDetailByOrderId(@RequestParam("ordersId")Integer ordersId){
-        OrderList orderListByOrderId = orderService.getOrderListByOrderId(ordersId);
+        List<OrderList> orderListByOrderId = orderService.getOrderListByOrderId(ordersId);
         return Result.success("获取订单详情成功",orderListByOrderId);
     }
+
+
 
 
 }

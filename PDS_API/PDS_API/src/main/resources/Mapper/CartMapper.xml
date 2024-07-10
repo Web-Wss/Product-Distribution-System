@@ -57,4 +57,44 @@
     </select>
 
 
+<!--    获取订单商品列表
+List<Cart> getCartListByUserIdAndSelectedStatus(Integer userId);
+-->
+    <resultMap id="getCartListByUserIdAndSelectedStatusMap" type="Cart">
+        <id property="cartId" column="cart_id"></id>
+        <result property="userId" column="user_id"></result>
+        <result property="goodsId" column="goods_id"></result>
+        <result property="goodsNumber" column="goods_number"></result>
+        <result property="goodsSelectedStatus" column="goods_selected_status"></result>
+            <collection property="goods" ofType="Goods">
+            <id property="goodsId" column="goods_id"></id>
+            <result property="goodsClassificationId" column="goods_classification_id"></result>
+            <result property="goodsName" column="goods_name"></result>
+            <result property="goodsPrice" column="goods_price"></result>
+            <result property="goodsOldPrice" column="goods_old_price"></result>
+            <result property="goodsCompany" column="goods_company"></result>
+            <result property="goodsTotalInventory" column="goods_total_inventory"></result>
+            <result property="goodsImg" column="goods_img"></result>
+            <result property="goodsVideo" column="goods_video"></result>
+            <result property="goodsStatus" column="goods_status"></result>
+            <result property="createTime" column="create_time"></result>
+            <result property="isDelete" column="is_delete"></result>
+            <result property="soldQuantity" column="sold_quantity"></result>
+            <result property="remainingInventory" column="remaining_inventory"></result>
+            </collection>
+        <collection property="goodsClassification" ofType="GoodsClassification">
+            <id property="goodsClassificationId" column="goods_classification_id"></id>
+            <result property="goodsClassificationName" column="goods_classification_name"></result>
+        </collection>
+    </resultMap>
+    <select id="getCartListByUserIdAndSelectedStatus" resultMap="getCartListByUserIdAndSelectedStatusMap">
+        SELECT *
+        FROM cart c
+                 LEFT JOIN goods g ON c.goods_id = g.goods_id
+                 LEFT JOIN goods_classification gc ON gc.goods_classification_id = g.goods_classification_id
+        WHERE c.goods_selected_status = 1
+    </select>
+
+
+
 </mapper>

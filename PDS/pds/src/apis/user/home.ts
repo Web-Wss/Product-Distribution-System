@@ -197,3 +197,29 @@ export function getOrderDetailApi(ordersId:number): AxiosPromise<any> {
     params: { ordersId }
   });
 }
+
+// 获取生成订单信息根据用户id
+export function getCartListByUserIdAndSelectedStatusApi(userId:number): AxiosPromise<any> {
+  return request({
+    url: "/goods/getcartlistbyuseridandselectedstatus",
+    method: "POST",
+    params: { userId }
+  });
+}
+
+// 获取满减规则
+export function getFullReductionRuleApi(): AxiosPromise<any> {
+  return request({
+    url: "/goods/getreductionlist",
+    method: "GET",
+  });
+}
+
+// 生成订单
+export function createOrderApi(data:object): AxiosPromise<any> {
+  return request({
+    url: "/goods/generateorder",
+    method: "POST",
+    data
+  });
+}

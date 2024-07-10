@@ -1,12 +1,12 @@
 // 导入router所需的方法
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory,createWebHashHistory } from 'vue-router'
 
 // 导入路由页面配置
 import routes from './route'
 
 // 路由参数配置
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes
 })
 

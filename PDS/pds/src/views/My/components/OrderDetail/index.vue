@@ -17,61 +17,63 @@ const stepList = ref([
 const active = ref(1);
 
 // 订单详细信息
-const orderInfo = ref({
-  orderListId: 2025001,
-  ordersId: 2025001,
-  goodsId: 1,
-  goodsPrice: null,
-  goodsNumber: 1,
-  priceSubtotal: 15,
-  address: {
-    addressId: 1,
-    userId: 2025001,
-    addressInfo: "安徽省合肥市庐阳区XX小区",
-    contacts: "位先生",
-    phone: "13359074748",
-    isDefault: 1,
-  },
-  orders: {
+const orderInfo = ref([
+  {
+    orderListId: 2025001,
     ordersId: 2025001,
-    userId: 2025001,
-    addressId: 1,
-    orderTotalPrice: 15,
-    orderDiscountPrice: 0,
-    orderActualPayment: 15,
-    orderCreateTime: "2024-07-04 17:50:06",
-    orderRemarks: "备注",
-    orderStatus: 1,
-    payType: null,
-    completionTime: "2024-07-06 16:40:53",
-    distributorId: 2025001,
-  },
-  goods: {
     goodsId: 1,
-    goodsClassificationId: 4,
-    goodsName: "星际导弹（每盒四根）",
-    goodsPrice: 15,
-    goodsOldPrice: 25,
-    goodsCompany: "4根/盒",
-    goodsTotalInventory: 36,
-    goodsImg: "http://ywesc-img.webwss.cn/yh/1.png",
-    goodsVideo: "http://ywesc-img.webwss.cn/yh/1.mp4",
-    goodsStatus: 1,
-    createTime: "2024-07-02 16:42:38",
-    isDelete: 1,
-    soldQuantity: null,
-    remainingInventory: null,
+    goodsPrice: null,
+    goodsNumber: 1,
+    priceSubtotal: 15,
+    address: {
+      addressId: 1,
+      userId: 2025001,
+      addressInfo: "安徽省合肥市庐阳区XX小区",
+      contacts: "位先生",
+      phone: "13359074748",
+      isDefault: 1,
+    },
+    orders: {
+      ordersId: 2025001,
+      userId: 2025001,
+      addressId: 1,
+      orderTotalPrice: 15,
+      orderDiscountPrice: 0,
+      orderActualPayment: 15,
+      orderCreateTime: "2024-07-04 17:50:06",
+      orderRemarks: "备注",
+      orderStatus: 1,
+      payType: null,
+      completionTime: "2024-07-06 16:40:53",
+      distributorId: 2025001,
+    },
+    goods: {
+      goodsId: 1,
+      goodsClassificationId: 4,
+      goodsName: "星际导弹（每盒四根）",
+      goodsPrice: 15,
+      goodsOldPrice: 25,
+      goodsCompany: "4根/盒",
+      goodsTotalInventory: 36,
+      goodsImg: "http://ywesc-img.webwss.cn/yh/1.png",
+      goodsVideo: "http://ywesc-img.webwss.cn/yh/1.mp4",
+      goodsStatus: 1,
+      createTime: "2024-07-02 16:42:38",
+      isDelete: 1,
+      soldQuantity: null,
+      remainingInventory: null,
+    },
   },
-});
+]);
 
 // 获取订单id
 const orderId = ref(route.query.ordersId);
 // 获取订单信息
 const getOrderInfo = async () => {
   const res = await getOrderDetailApi(orderId.value);
-  // console.log(res);
+  console.log(res);
   orderInfo.value = res.data.data;
-  active.value = res.data.data.orders.orderStatus - 1;
+  active.value = res.data.data[0].orders.orderStatus - 1;
 };
 onMounted(() => {
   getOrderInfo();
@@ -100,41 +102,53 @@ onMounted(() => {
 
     <!-- 商品信息 -->
     <div class="order-info">
-      <div class="order-info-item">
+      <div
+        class="order-info-item"
+        v-for="item in orderInfo"
+        :key="item.orderListId"
+      >
         <div class="goods_img">
-          <img :src="orderInfo.goods.goodsImg" alt="" />
+          <img :src="item.goods.goodsImg" alt="" />
         </div>
         <div class="goods_name">
-          <div class="name">{{ orderInfo.goods.goodsName }}</div>
-          <div class="price">单价:￥{{ orderInfo.goodsPrice }}</div>
+          <div class="name">{{ item.goods.goodsName }}</div>
+          <div class="price">单价:￥{{ item.goodsPrice }}</div>
         </div>
-        <div class="goods_num">X{{ orderInfo.goodsNumber }}</div>
-        <div class="goods_total">￥{{ orderInfo.priceSubtotal }}</div>
+        <div class="goods_num">X{{ item.goodsNumber }}</div>
+        <div class="goods_total">￥{{ item.priceSubtotal }}</div>
       </div>
       <!-- 订单信息 -->
       <van-cell-group>
+        <van-cell title="总计">
+          <van-tag type="success" color="#913cff"
+            >￥{{ orderInfo[0].orders.orderTotalPrice }}</van-tag
+          >
+        </van-cell>
         <van-cell title="优惠金额">
           <van-tag type="success"
-            >￥{{ orderInfo.orders.orderDiscountPrice }}</van-tag
+            >￥{{ orderInfo[0].orders.orderDiscountPrice }}</van-tag
           >
         </van-cell>
         <van-cell title="实付金额">
           <van-tag type="primary" size="large"
-            >￥{{ orderInfo.orders.orderActualPayment }}</van-tag
+            >￥{{ orderInfo[0].orders.orderActualPayment }}</van-tag
           >
         </van-cell>
-        <van-cell title="收货地址" :label="orderInfo.address.addressInfo" />
-        <van-cell title="联系人" :value="orderInfo.address.contacts" />
-        <van-cell title="联系方式" :value="orderInfo.address.phone" />
-        <van-cell title="订单ID" :value="orderInfo.orders.ordersId" />
-        <van-cell title="下单时间" :value="orderInfo.orders.orderCreateTime" />
-        <van-cell title="分销商ID" :value="orderInfo.orders.distributorId" />
+        <van-cell title="收货地址" :label="orderInfo[0].address.addressInfo" />
+        <van-cell title="联系人" :value="orderInfo[0].address.contacts" />
+        <van-cell title="联系方式" :value="orderInfo[0].address.phone" />
+        <van-cell title="订单ID" :value="orderInfo[0].orders.ordersId" />
+        <van-cell
+          title="下单时间"
+          :value="orderInfo[0].orders.orderCreateTime"
+        />
+        <van-cell title="分销商ID" :value="orderInfo[0].orders.distributorId" />
         <van-cell
           title="订单完成时间"
-          :value="orderInfo.orders.completionTime"
+          :value="orderInfo[0].orders.completionTime"
         />
-        <van-cell title="支付方式" :value="orderInfo.orders.payType" />
-        <van-cell title="备注信息" :value="orderInfo.orders.orderRemarks" />
+        <van-cell title="支付方式" :value="orderInfo[0].orders.payType" />
+        <van-cell title="备注信息" :value="orderInfo[0].orders.orderRemarks" />
       </van-cell-group>
     </div>
   </div>

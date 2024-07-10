@@ -8,6 +8,7 @@ const Login = () => import("@/views/Login/index.vue")
 const Address = () => import("@/views/My/components/Address/index.vue")
 const Order = () => import("@/views/My/components/Order/index.vue")
 const OrderDetail = () => import("@/views/My/components/OrderDetail/index.vue")
+const PublishOrder = () => import("@/views/Cart/components/PublishOrder/index.vue")
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
@@ -24,6 +25,14 @@ const routes: Array<RouteRecordRaw> = [
     component:Cart,
     meta: {
       title: "购物车"
+    }
+  },
+  {
+    path: "/publishOrder",
+    name: "PublishOrder",
+    component:PublishOrder,
+    meta: {
+      title: "订单结算"
     }
   },
   {

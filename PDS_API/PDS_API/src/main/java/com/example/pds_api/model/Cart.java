@@ -26,5 +26,7 @@ public class Cart {
 
     @TableField(exist = false)
     private Goods goods;
+    @TableField(exist = false)
+    private GoodsClassification goodsClassification;
 
 }

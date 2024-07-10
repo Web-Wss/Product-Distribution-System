@@ -16,4 +16,5 @@ public interface CartService {
 //    获取购物车总价根据用户id
     Integer getCartTotalPriceByUserId(Integer userId);
 
+    List<Cart> getCartListByUserIdAndSelectedStatus(Integer userId);
 }
