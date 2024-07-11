@@ -96,7 +96,7 @@ onMounted(() => {
       <div class="old-price">
         市场价：{{ goodsInfo.goodsOldPrice }}元/{{ goodsInfo.goodsCompany }}
       </div>
-      <div class="inventory">库存：{{ goodsInfo.goodsTotalInventory }}</div>
+      <div class="inventory">库存：{{ goodsInfo.remainingInventory }}</div>
     </div>
     <!-- 分割线 -->
     <!-- 视频 -->

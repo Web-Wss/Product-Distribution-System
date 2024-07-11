@@ -12,4 +12,5 @@ public interface CartMapper extends BaseMapper<Cart> {
     Integer getCartTotalPriceByUserId(Integer userId);
 
     List<Cart> getCartListByUserIdAndSelectedStatus(Integer userId);
+
 }

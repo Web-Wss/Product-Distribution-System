@@ -1,13 +1,14 @@
 package com.example.pds_api.model;
 
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,6 +16,7 @@ import java.util.List;
 @TableName("order_list")
 public class OrderList {
 
+    @TableId(type = IdType.AUTO)
     private Integer orderListId;//订单列表id
 
     private Integer ordersId;//订单id
