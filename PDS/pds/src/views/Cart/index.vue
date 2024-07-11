@@ -15,15 +15,26 @@ import { debounce } from "lodash";
 
 const userStore = useUserStore();
 const router = useRouter();
-const onSubmit = () => {
-  router.push("/publishOrder");
-};
 
 // 删除按钮文字
 const deleteText = ref("");
 // 提交订单按钮是否可以点击
 const submitBtn = ref(true);
-
+const onSubmit = () => {
+  // 重新获取购物车列表
+  getCarList();
+  setTimeout(() => {
+    if (!submitBtn.value) {
+      router.push("/publishOrder");
+    } else {
+      showToast({
+        message: "请选择商品",
+        position: "bottom",
+        duration: 1000,
+      });
+    }
+  }, 500);
+};
 // 获取购物车列表根据用户id
 const cartList = ref([]);
 const getCarList = async () => {
@@ -33,7 +44,6 @@ const getCarList = async () => {
   // 遍历购物车列表，判断是否有勾选
   deleteText.value = "";
   submitBtn.value = true;
-
   cartList.value.forEach((item) => {
     if (item.goodsSelectedStatus == 1) {
       deleteText.value = "删除已勾选的商品";
@@ -145,9 +155,11 @@ onMounted(() => {
       <!-- <van-empty description="亲，购物车是空的哦，请加购您心仪的商品" /> -->
       <!-- 购物车列表 -->
       <div class="list" v-for="item in cartList" :key="item.cartId">
+        <div class="wz" v-if="item.isSelected == 0">已售罄</div>
         <!-- 复选框 -->
         <div class="check">
           <van-checkbox
+            :disabled="item.isSelected == 0 ? true : false"
             v-model="item.goodsSelectedStatus"
             @click="updateCartInfo(item)"
           ></van-checkbox>
@@ -203,11 +215,22 @@ onMounted(() => {
 
     width: 100%;
     .list {
+      position: relative;
       display: flex;
       align-items: center;
       width: 100%;
       background-color: white;
       margin-top: 6px;
+      .wz {
+        z-index: 9;
+        background-color: #0000007d;
+        position: absolute;
+        width: 24%;
+        left: 10.5%;
+        text-align: center;
+        color: white;
+        font-size: 1.6rem;
+      }
       .check {
         padding-left: 10px;
       }

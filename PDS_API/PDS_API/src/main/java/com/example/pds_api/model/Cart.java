@@ -24,6 +24,8 @@ public class Cart {
 
     private Integer goodsSelectedStatus;//商品选中状态
 
+    private Integer isSelected;//是否可以选中
+
     @TableField(exist = false)
     private Goods goods;
     @TableField(exist = false)

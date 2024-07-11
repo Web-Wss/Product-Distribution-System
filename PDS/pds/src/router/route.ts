@@ -9,6 +9,14 @@ const Address = () => import("@/views/My/components/Address/index.vue")
 const Order = () => import("@/views/My/components/Order/index.vue")
 const OrderDetail = () => import("@/views/My/components/OrderDetail/index.vue")
 const PublishOrder = () => import("@/views/Cart/components/PublishOrder/index.vue")
+
+// 分销员
+const Distributor = () => import("@/views/Distributor/index.vue")
+const DData = () => import("@/views/Distributor/Data/index.vue")
+const DOrder = () => import("@/views/Distributor/Order/index.vue")
+const DPromotion = () => import("@/views/Distributor/Promotion/index.vue")
+const DMy = () => import("@/views/Distributor/My/index.vue")
+const DLogin = () => import("@/views/Distributor/Login/index.vue")
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
@@ -82,7 +90,65 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       title: "登录"
     }
-  }
+  },
+
+  // 分销员
+  {
+    path: "/dlogin",
+    name: "DLogin",
+    component:DLogin,
+    meta: {
+      title: "分销商登录",
+      keepAlive: true,
+    }
+  },
+  {
+    path: "/distributor",
+    name: "Distributor",
+    component:Distributor,
+    meta: {
+      title: "分销后台",
+      keepAlive: true,
+    },
+    children: [
+      {
+        path: "/distributor",
+        name: "DData",
+        component:DData,
+        meta: {
+          title: "分销数据",
+          keepAlive: true,
+        }
+      },
+      {
+        path: "/dorder",
+        name: "DOrder",
+        component:DOrder,
+        meta: {
+          title: "订单管理",
+          keepAlive: true,
+        }
+      },
+      {
+        path: "/dpromotion",
+        name: "DPromotion",
+        component:DPromotion,
+        meta: {
+          title: "营销推广",
+          keepAlive: true,
+        }
+      },
+      {
+        path: "/dmy",
+        name: "DMy",
+        component:DMy,
+        meta: {
+          title: "个人信息",
+          keepAlive: true,
+        }
+      },
+    ]
+  },
 ];
 
 export default routes;

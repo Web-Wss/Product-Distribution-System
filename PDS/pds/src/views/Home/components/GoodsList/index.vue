@@ -8,11 +8,8 @@ import {
 } from "@/apis/user/home";
 // lodash
 import { debounce } from "lodash";
-
 const userStore = useUserStore();
-
 const props = defineProps(["classificationId", "searchValue"]);
-
 // 搜索
 const performSearch = (searchValue) => {
   console.log("子组件执行搜索", searchValue);
@@ -21,10 +18,7 @@ const performSearch = (searchValue) => {
     goodsList.value = res.data.data;
   });
 };
-// watchEffect(() => {
-//   const { searchValue } = props; // 显式解构，虽然在这里不是必须的，但有助于理解哪些是依赖项
-//   performSearch(searchValue); // 执行搜索逻辑
-// });
+
 watch(
   () => props.searchValue,
   (newValue) => {
@@ -38,10 +32,17 @@ const goodsList = ref([]);
 const getGoodsList = async () => {
   await getGoodsListByClassificationIdApi(props.classificationId).then(
     (res) => {
-      // console.log(res);
+      console.log(res);
       goodsList.value = res.data.data;
     }
   );
+};
+// 已售罄按钮
+const nobuy = () => {
+  showToast({
+    message: "该商品已售罄",
+    position: "top",
+  });
 };
 
 // 加购面板
@@ -119,11 +120,20 @@ onMounted(() => {
         </div>
         <div class="right">
           <van-button
+            v-if="item.remainingInventory > 0"
             class="btn"
             type="success"
             size="small"
             @click.stop="addCart(item)"
             >+ 加购</van-button
+          >
+          <van-button
+            v-if="item.remainingInventory <= 0"
+            class="btn"
+            type="warning"
+            size="small"
+            @click.stop="nobuy"
+            >已售罄</van-button
           >
         </div>
       </div>

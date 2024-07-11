@@ -46,7 +46,7 @@ const onSubmit = async () => {
       <br />
       <span>烟花线上选购平台</span>
     </div>
-    <!-- 输入康 -->
+    <!-- 输入框 -->
     <van-form @submit="onSubmit">
       <van-field
         required

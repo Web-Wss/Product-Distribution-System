@@ -5,8 +5,9 @@ import {
   createOrderApi,
 } from "@/apis/user/home";
 import { ref, onMounted } from "vue";
-
 import { useUserStore } from "@/store/user";
+import { useRouter } from "vue-router";
+const router = useRouter();
 
 const userStore = useUserStore();
 // 返回按钮
@@ -125,6 +126,7 @@ onMounted(() => {
 });
 // 提交订单按钮
 const onSubmit = async () => {
+  // 重新获取订单信息
   const publishOrderInfo = {
     userId: userStore.userInfo.userId,
     orderDiscountPrice: orderDiscountPrice.value,
@@ -135,8 +137,14 @@ const onSubmit = async () => {
     remark: remark.value,
     distributorId: userStore.distributorId,
   };
-  // const res = await createOrderApi(publishOrderInfo);
+  const res = await createOrderApi(publishOrderInfo);
   console.log(publishOrderInfo);
+  // if (res.data.code == 200) {
+  //   // 跳转到订单详情页面
+  //   router.replace({
+  //     path: "/order",
+  //   });
+  // }
 };
 </script>
 

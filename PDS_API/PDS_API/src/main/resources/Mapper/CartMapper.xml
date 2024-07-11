@@ -11,6 +11,7 @@
         <result property="goodsId" column="goods_id"></result>
         <result property="goodsNumber" column="goods_number"></result>
         <result property="goodsSelectedStatus" column="goods_selected_status"></result>
+        <result property="isSelected" column="is_selected"></result>
         <collection property="goods" ofType="Goods">
             <id property="goodsId" column="goods_id"></id>
             <result property="goodsClassificationId" column="goods_classification_id"></result>
@@ -37,6 +38,7 @@
         FROM cart c
                  LEFT JOIN goods g ON c.goods_id = g.goods_id
                  LEFT JOIN order_list o ON g.goods_id = o.goods_id
+        WHERE  c.user_id = #{userId}
         GROUP BY
             c.cart_id,
             g.goods_id,
@@ -66,7 +68,8 @@ List<Cart> getCartListByUserIdAndSelectedStatus(Integer userId);
         <result property="goodsId" column="goods_id"></result>
         <result property="goodsNumber" column="goods_number"></result>
         <result property="goodsSelectedStatus" column="goods_selected_status"></result>
-            <collection property="goods" ofType="Goods">
+        <result property="isSelected" column="is_selected"></result>
+        <collection property="goods" ofType="Goods">
             <id property="goodsId" column="goods_id"></id>
             <result property="goodsClassificationId" column="goods_classification_id"></result>
             <result property="goodsName" column="goods_name"></result>
@@ -81,18 +84,29 @@ List<Cart> getCartListByUserIdAndSelectedStatus(Integer userId);
             <result property="isDelete" column="is_delete"></result>
             <result property="soldQuantity" column="sold_quantity"></result>
             <result property="remainingInventory" column="remaining_inventory"></result>
-            </collection>
+        </collection>
         <collection property="goodsClassification" ofType="GoodsClassification">
             <id property="goodsClassificationId" column="goods_classification_id"></id>
             <result property="goodsClassificationName" column="goods_classification_name"></result>
         </collection>
     </resultMap>
     <select id="getCartListByUserIdAndSelectedStatus" resultMap="getCartListByUserIdAndSelectedStatusMap">
-        SELECT *
+
+        SELECT
+            c.*,
+            g.*,
+            gc.*,
+            IFNULL(SUM(o.goods_number), 0) AS sold_quantity,
+            g.goods_total_inventory - IFNULL(SUM(o.goods_number), 0) AS remaining_inventory
         FROM cart c
                  LEFT JOIN goods g ON c.goods_id = g.goods_id
+                 LEFT JOIN order_list o ON g.goods_id = o.goods_id
                  LEFT JOIN goods_classification gc ON gc.goods_classification_id = g.goods_classification_id
-        WHERE c.goods_selected_status = 1
+        where c.user_id = #{userId} and c.goods_selected_status = 1
+        GROUP BY
+            c.cart_id,
+            g.goods_id,
+            g.goods_total_inventory
     </select>
 
 

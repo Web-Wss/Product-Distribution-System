@@ -117,7 +117,6 @@ public class GoodsController {
 //        设置订单信息
         Orders orders = new Orders();
         Integer ordersId;
-        Integer IsOk = null;
         orders.setUserId(generateOrderDTO.getUserId());
         orders.setAddressId(generateOrderDTO.getAddressId());
         orders.setOrderTotalPrice(generateOrderDTO.getOrderTotalPrice());
@@ -134,23 +133,24 @@ public class GoodsController {
         }
 //        设置订单列表信息
         OrderList orderList = new OrderList();
+        Cart cart1 = new Cart();
         for (Cart cart : generateOrderDTO.getOrderGoodsList()) {
             orderList.setOrdersId(ordersId);
             orderList.setGoodsId(cart.getGoodsId());
             orderList.setGoodsPrice(cart.getGoods().getGoodsPrice());
             orderList.setGoodsNumber(cart.getGoodsNumber());
             orderList.setPriceSubtotal(cart.getGoods().getGoodsPrice().multiply(new BigDecimal(cart.getGoodsNumber())));
-            IsOk = orderListMapper.insert(orderList);
-        }
-//        删除购物车已勾选的信息根据用户id
-        if (IsOk == 1){
-            int delete = cartMapper.delete(new QueryWrapper<Cart>().eq("user_id", generateOrderDTO.getUserId()).eq("goods_selected_status", 1));
-            if (delete == 1) {
-                return Result.success("生成订单成功");
+            orderListMapper.insert(orderList);
+//              删除购物车
+            cartMapper.deleteById(cart.getCartId());
+//            判断商品库存和生成订单数量比较，如果库存大于生成订单数量，则不做改变，如果库存小于等于生成订单数量，则将购物车中商品设置为不可勾选，并且已勾选的商品设为未勾选
+            if(cart.getGoods().getRemainingInventory() <= cart.getGoodsNumber()) {
+                cart1.setIsSelected(0);
+                cart1.setGoodsSelectedStatus(0);
+                cartMapper.update(cart1,new QueryWrapper<Cart>().eq("goods_id",cart.getGoodsId()));
             }
-        }else {
-            return Result.fail("生成订单失败");
         }
+
         return Result.success("生成订单成功");
     }
 
