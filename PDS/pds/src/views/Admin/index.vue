@@ -1,5 +1,5 @@
 <script setup>
-import TabBar from "@/components/Distributor/DisTabBar/index.vue";
+import TabBar from "@/components/Admin/AdminTabBar/index.vue";
 </script>
 
 <template>

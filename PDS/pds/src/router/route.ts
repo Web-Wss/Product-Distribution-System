@@ -18,6 +18,16 @@ const DPromotion = () => import("@/views/Distributor/Promotion/index.vue")
 const DMy = () => import("@/views/Distributor/My/index.vue")
 const DLogin = () => import("@/views/Distributor/Login/index.vue")
 const CommissionDetail = () => import("@/views/Distributor/Promotion/components/CommissionDetail/index.vue")
+
+// 管理员
+const Admin = () => import("@/views/Admin/index.vue")
+const AData = () => import("@/views/Admin/components/Data/index.vue")
+const AGoods = () => import("@/views/Admin/components/Goods/index.vue")
+const AUser = () => import("@/views/Admin/components/User/index.vue")
+const ADistributor = () => import("@/views/Admin/components/Distributor/index.vue")
+const AOrder = () => import("@/views/Admin/components/Order/index.vue")
+const ASystem = () => import("@/views/Admin/components/System/index.vue")
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
@@ -154,6 +164,71 @@ const routes: Array<RouteRecordRaw> = [
         component:DMy,
         meta: {
           title: "个人信息",
+          keepAlive: true,
+        }
+      },
+    ]
+  },
+  {
+    path: "/admin",
+    name: "Admin",
+    component:Admin,
+    meta: {
+      title: "管理员后台",
+      keepAlive: true,
+    },
+    children: [
+      {
+        path: "/admin",
+        name: "AData",
+        component:AData,
+        meta: {
+          title: "经营看板",
+          keepAlive: true,
+        }
+      },
+      {
+        path: "/agoods",
+        name: "AGoods",
+        component:AGoods,
+        meta: {
+          title: "商品中心",
+          keepAlive: true,
+        }
+      },
+      {
+        path: "/auser",
+        name: "AUser",
+        component:AUser,
+        meta: {
+          title: "会员中心",
+          keepAlive: true,
+        }
+      },
+      {
+        path: "/adistributor",
+        name: "ADistributor",
+        component:ADistributor,
+        meta: {
+          title: "分销管理",
+          keepAlive: true,
+        }
+      },
+      {
+        path: "/aorder",
+        name: "AOrder",
+        component:AOrder,
+        meta: {
+          title: "交易中心",
+          keepAlive: true,
+        }
+      },
+      {
+        path: "/asystem",
+        name: "ASystem",
+        component:ASystem,
+        meta: {
+          title: "系统管理",
           keepAlive: true,
         }
       },

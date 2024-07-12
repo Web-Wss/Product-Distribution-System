@@ -7,6 +7,8 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AdminTabBar: typeof import('./src/components/Admin/AdminTabBar/index.vue')['default']
+    DisTabBar: typeof import('./src/components/Distributor/DisTabBar/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TabBar: typeof import('./src/components/TabBar/index.vue')['default']
