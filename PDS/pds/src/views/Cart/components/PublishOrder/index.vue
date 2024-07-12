@@ -126,7 +126,6 @@ onMounted(() => {
 });
 // 提交订单按钮
 const onSubmit = async () => {
-  // 重新获取订单信息
   const publishOrderInfo = {
     userId: userStore.userInfo.userId,
     orderDiscountPrice: orderDiscountPrice.value,
@@ -139,12 +138,12 @@ const onSubmit = async () => {
   };
   const res = await createOrderApi(publishOrderInfo);
   console.log(publishOrderInfo);
-  // if (res.data.code == 200) {
-  //   // 跳转到订单详情页面
-  //   router.replace({
-  //     path: "/order",
-  //   });
-  // }
+  if (res.data.code == 200) {
+    // 跳转到订单详情页面
+    router.replace({
+      path: "/order",
+    });
+  }
 };
 </script>
 

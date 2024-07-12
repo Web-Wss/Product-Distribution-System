@@ -16,7 +16,6 @@ const tabList = ref([
   { name: "分拣中", status: 2 },
   { name: "配送中", status: 3 },
   { name: "已完成", status: 4 },
-  { name: "已取消", status: 5 },
 ]);
 
 // 订单列表

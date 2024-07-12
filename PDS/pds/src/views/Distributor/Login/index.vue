@@ -2,8 +2,9 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
-import { useUserStore } from "@/store/user";
-const userStore = useUserStore();
+import { useDistributorStore } from "@/store/distributor";
+import { distributorLoginApi } from "@/apis/distributor";
+const distributorStore = useDistributorStore();
 
 const router = useRouter();
 
@@ -13,7 +14,27 @@ const form = ref({
 });
 
 // 提交表单
-const onSubmit = async () => {};
+const onSubmit = async () => {
+  showLoadingToast({
+    message: "登录中...",
+    forbidClick: true,
+    duration: 2000,
+  });
+  const res = await distributorLoginApi(form.value);
+  if (res.data.code === 400) {
+    showFailToast(res.data.msg);
+  } else {
+    // userStore.setUserInfo(res.data.data.token, res.data.data.user);
+    distributorStore.setDistributoeInfo(
+      res.data.data.token,
+      res.data.data.distributor
+    );
+    showSuccessToast("登录成功，正在跳转页面！");
+    setTimeout(() => {
+      router.replace("/distributor");
+    }, 1000);
+  }
+};
 </script>
 
 <template>

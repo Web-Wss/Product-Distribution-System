@@ -1,13 +1,40 @@
 <script setup>
+import { getDataBoardApi } from "@/apis/distributor";
 import * as echarts from "echarts";
 import { onMounted, ref } from "vue";
+import { useDistributorStore } from "@/store/distributor";
+const distributorStore = useDistributorStore();
 let myChart = ref();
 let option = ref({});
 
+// 日期
+const date = ref([]);
+const price = ref([]);
+const orderNumber = ref(0);
+const orderTotalPrice = ref(0);
+
+const getDataBoard = async () => {
+  const res = await getDataBoardApi(
+    distributorStore.distributorInfo.distributorId
+  );
+  console.log(res);
+  if (res.data.code == 200) {
+    date.value = res.data.data.date;
+    price.value = res.data.data.price;
+    orderNumber.value = res.data.data.orderNumber;
+    orderTotalPrice.value = res.data.data.orderTotalPrice;
+    init();
+  }
+};
+
 onMounted(() => {
+  getDataBoard();
   init();
 });
 const init = () => {
+  if (myChart.value) {
+    myChart.value.dispose();
+  }
   // 基于准备好的dom，初始化echarts实例
   myChart.value = echarts.init(document.getElementById("main"));
   option.value = {
@@ -27,8 +54,12 @@ const init = () => {
       right: 50,
     },
     xAxis: {
-      data: ["7/5", "7/6", "7/7", "7/8", "7/9", "7/10", "7/11"],
+      data: date,
       name: "日期",
+      axisLabel: {
+        // 旋转角度，正值为顺时针
+        rotate: 45,
+      },
     },
     yAxis: {
       name: "金额",
@@ -36,7 +67,7 @@ const init = () => {
     series: [
       {
         type: "bar",
-        data: [754, 375, 1739, 223, 1208, 979, 2012],
+        data: price,
         label: {
           show: true,
           position: "top",
@@ -58,11 +89,11 @@ const init = () => {
   <div class="info">
     <div class="item">
       订单数量
-      <div class="span">45个</div>
+      <div class="span">{{ orderNumber }}个</div>
     </div>
     <div class="item">
       订单总额
-      <div class="span">8926元</div>
+      <div class="span">{{ orderTotalPrice }}元</div>
     </div>
   </div>
 </template>

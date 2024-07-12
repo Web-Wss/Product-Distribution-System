@@ -135,16 +135,18 @@ public class GoodsServiceImpl implements GoodsService {
             return 0;
         }
 //        设置订单列表信息
-        Integer isOk = null;
         OrderList orderList = new OrderList();
         Cart cart1 = new Cart();
         for (Cart cart : generateOrderDTO.getOrderGoodsList()) {
+            orderList.setOrderListId(null);
             orderList.setOrdersId(ordersId);
             orderList.setGoodsId(cart.getGoodsId());
             orderList.setGoodsPrice(cart.getGoods().getGoodsPrice());
             orderList.setGoodsNumber(cart.getGoodsNumber());
             orderList.setPriceSubtotal(cart.getGoods().getGoodsPrice().multiply(new BigDecimal(cart.getGoodsNumber())));
-            isOk = orderListMapper.insert(orderList);
+            System.out.println("插值"+orderList);
+
+            orderListMapper.insert(orderList);
 //              删除购物车
             cartMapper.deleteById(cart.getCartId());
 //            判断商品库存和生成订单数量比较，如果库存大于生成订单数量，则不做改变，如果库存小于等于生成订单数量，则将购物车中商品设置为不可勾选，并且已勾选的商品设为未勾选
@@ -154,6 +156,6 @@ public class GoodsServiceImpl implements GoodsService {
                 cartMapper.update(cart1,new QueryWrapper<Cart>().eq("goods_id",cart.getGoodsId()));
             }
         }
-        return isOk;
+        return 1;
     }
 }

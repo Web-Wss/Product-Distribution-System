@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 @TableName("order_list")
 public class OrderList {
 
-    @TableId(type = IdType.AUTO)
+    @TableId(value = "order_list_id",type = IdType.AUTO)
     private Integer orderListId;//订单列表id
 
     private Integer ordersId;//订单id

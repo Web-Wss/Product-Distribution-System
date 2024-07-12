@@ -149,6 +149,7 @@ onMounted(() => {
       title="购物车"
       :left-text="deleteText"
       @click-left="deleteCartInfoByCartId"
+      placeholder
     />
 
     <div class="content">
@@ -210,7 +211,7 @@ onMounted(() => {
   width: 100%;
   background-color: #f7f7f7;
   .content {
-    margin-top: 46px;
+    // margin-top: 46px;
     margin-bottom: 100px;
 
     width: 100%;

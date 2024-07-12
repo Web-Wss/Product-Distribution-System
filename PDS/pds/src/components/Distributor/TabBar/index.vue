@@ -1,6 +1,20 @@
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
+
+// 获取地址栏参数
+const router = useRouter();
+const list = ref(["/distributor", "/dorder", "/dpromotion", "/dmy"]);
 const active = ref(0);
+
+// 修改active
+onMounted(() => {
+  list.value.forEach((item, index) => {
+    if (item === router.currentRoute.value.path) {
+      active.value = index;
+    }
+  });
+});
 </script>
 
 <template>

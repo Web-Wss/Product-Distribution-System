@@ -17,6 +17,7 @@ const DOrder = () => import("@/views/Distributor/Order/index.vue")
 const DPromotion = () => import("@/views/Distributor/Promotion/index.vue")
 const DMy = () => import("@/views/Distributor/My/index.vue")
 const DLogin = () => import("@/views/Distributor/Login/index.vue")
+const CommissionDetail = () => import("@/views/Distributor/Promotion/components/CommissionDetail/index.vue")
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
@@ -135,6 +136,15 @@ const routes: Array<RouteRecordRaw> = [
         component:DPromotion,
         meta: {
           title: "营销推广",
+          keepAlive: true,
+        }
+      },
+      {
+        path: "/commissiondetail",
+        name: "CommissionDetail",
+        component:CommissionDetail,
+        meta: {
+          title: "佣金明细",
           keepAlive: true,
         }
       },
