@@ -71,4 +71,6 @@ List<Goods> selectGoodsWithInventoryByClassification(@RequestParam("classificati
     </select>
 
 
+
+
 </mapper>

@@ -1,8 +1,10 @@
 <script setup>
 import { getOrderListByDistributorIdApi } from "@/apis/distributor";
 import { onMounted, ref } from "vue";
-
 import { useDistributorStore } from "@/store/distributor";
+
+import { useRouter } from "vue-router";
+const router = useRouter();
 const distributorStore = useDistributorStore();
 
 const activeNames = ref(["1"]);
@@ -17,6 +19,12 @@ const getOrderList = async () => {
   );
   console.log(res);
   orderList.value = res.data.data;
+};
+
+// 去订单详情
+const goOrderDetail = (ordersId) => {
+  console.log(ordersId);
+  router.push({ path: "/orderDetail", query: { ordersId: ordersId } });
 };
 
 onMounted(() => {
@@ -53,7 +61,12 @@ onMounted(() => {
               />
             </van-cell-group>
             <div class="button" style="text-align: center; margin-top: 1rem">
-              <van-button type="primary" size="small">查看订单详情</van-button>
+              <van-button
+                type="primary"
+                size="small"
+                @click="goOrderDetail(item.ordersId)"
+                >查看订单详情</van-button
+              >
             </div>
           </van-collapse-item>
         </van-collapse>

@@ -1,6 +1,7 @@
 package com.example.pds_api.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
@@ -31,5 +32,12 @@ public class Distributor {
     private Integer commissionRate;//分销商佣金比例
 
     private BigDecimal alreadyWithdrawn;//已提现佣金
+
+    @TableField(exist = false)
+    private Integer OrderCount;//订单数量
+    @TableField(exist = false)
+    private Integer totalOrderAmount;//订单总额
+    @TableField(exist = false)
+    private Integer commission;//佣金
 
 }

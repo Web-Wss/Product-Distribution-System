@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.pds_api.mapper.AdministratorsMapper">
+
+<!--    根据日期查询销售额
+Integer getDailyOrderTotalPrice(String s);
+-->
+    <select id="getDailyOrderTotalPrice" resultType="int">
+        SELECT SUM(order_total_price) FROM `orders` WHERE order_create_time LIKE #{s}
+    </select>
+
+
+<!--    获取订单总额
+    Integer getOrderTotalPrice();
+-->
+    <select id="getOrderTotalPrice" resultType="int">
+        SELECT SUM(order_total_price) FROM `orders`
+    </select>
+
+
+    <!--
+    //    根据商品id获取商品信息包括剩余库存
+    Goods getGoodsInfoById(Integer goodsId);
+-->
+    <resultMap id="getGoodsInfoByIdMap" type="Goods">
+        <id property="goodsId" column="goods_id"></id>
+        <result property="goodsClassificationId" column="goods_classification_id"></result>
+        <result property="goodsName" column="goods_name"></result>
+        <result property="goodsPrice" column="goods_price"></result>
+        <result property="goodsOldPrice" column="goods_old_price"></result>
+        <result property="goodsCompany" column="goods_company"></result>
+        <result property="goodsTotalInventory" column="goods_total_inventory"></result>
+        <result property="goodsImg" column="goods_img"></result>
+        <result property="goodsVideo" column="goods_video"></result>
+        <result property="goodsStatus" column="goods_status"></result>
+        <result property="createTime" column="create_time"></result>
+        <result property="isDelete" column="is_delete"></result>
+        <result property="soldQuantity" column="sold_quantity"></result>
+        <result property="remainingInventory" column="remaining_inventory"></result>
+        <collection property="goodsClassification" ofType="GoodsClassification">
+            <id property="goodsClassificationId" column="goods_classification_id"></id>
+            <result property="goodsClassificationName" column="goods_classification_name"></result>
+        </collection>
+    </resultMap>
+    <select id="getGoodsInfoById"  resultMap="getGoodsInfoByIdMap">
+        SELECT g.*,
+               gc.*,
+               IFNULL(SUM(o.goods_number), 0) AS sold_quantity,
+               g.goods_total_inventory - IFNULL(SUM(o.goods_number), 0) AS remaining_inventory
+        FROM
+            goods g
+                LEFT JOIN order_list o ON g.goods_id = o.goods_id
+                LEFT JOIN goods_classification gc ON gc.goods_classification_id = g.goods_classification_id
+        WHERE g.goods_id =  #{goodsId}
+        GROUP BY
+            g.goods_id, g.goods_total_inventory
+    </select>
+
+
+<!--
+//        查询该商品已售出数量
+    Integer getGoodsOutNumber(Integer goodsId);
+-->
+    <select id="getGoodsOutNumber" resultType="int">
+        SELECT SUM(goods_number) FROM `order_list`
+        WHERE goods_id = #{goodsId}
+    </select>
+
+
+<!--
+    void getDistributorRanking();
+-->
+    <select id="getDistributorRanking" resultType="DistributorVO">
+        SELECT
+            d.distributor_id,
+            COALESCE(SUM(o.order_total_price), 0) AS total_order_amount
+        FROM
+            distributor d
+                LEFT JOIN
+            orders o ON o.distributor_id = d.distributor_id
+        GROUP BY
+            d.distributor_id
+        ORDER BY
+		total_order_amount DESC;
+    </select>
+
+
+<!--    //    查询分销商总销售额
+    Integer getDistributorTotalOrderAmount(Integer distributorId);-->
+    <select id="getDistributorTotalOrderAmount" resultType="int">
+        SELECT SUM(order_total_price) FROM `orders`
+        WHERE distributor_id = #{distributorId}
+    </select>
+
+
+</mapper>

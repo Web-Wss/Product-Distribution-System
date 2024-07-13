@@ -1,8 +1,7 @@
-package com.example.pds_api.model;
+package com.example.pds_api.model.DTO;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.example.pds_api.model.GoodsClassification;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,8 +11,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@TableName("goods")
-public class Goods {
+public class GoodsDTO {
     @TableId
     private Integer goodsId;//商品id
 
@@ -29,22 +27,6 @@ public class Goods {
 
     private Integer goodsTotalInventory;//商品库存
 
-    private String goodsImg;//商品图片
-
-    private String goodsVideo;//商品视频
-
-    private Integer goodsStatus;//商品状态
-
-    private String createTime;//创建时间
-
-    private Integer isDelete;//是否删除
-
-    @TableField(exist = false)
-    private GoodsClassification goodsClassification;
-//    库存字段
-    @TableField(exist = false)
-    private Integer soldQuantity;//已售数量
-    @TableField(exist = false)
     private Integer remainingInventory;//剩余库存
 
 }
