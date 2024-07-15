@@ -126,7 +126,7 @@
                 <version>${spring-boot.version}</version>
                 <configuration>
                     <mainClass>com.example.pds_api.PdsApiApplication</mainClass>
-                    <skip>true</skip>
+<!--                    <skip>true</skip>-->
                 </configuration>
                 <executions>
                     <execution>

@@ -68,3 +68,30 @@ export function getorderlistApi(): AxiosPromise<any> {
     method: "get",
   });
 }
+
+// 获取用户列表根据用户id
+export function getuserinfobyidApi(userId: number): AxiosPromise<any> {
+  return request({
+    url: "/administrators/getorderlistbyuserid",
+    method: "get",
+    params: { userId },
+  });
+}
+
+// 修改订单状态根据订单id
+export function updateorderstatusApi(ordersId: number,orderStatus:number): AxiosPromise<any> {
+  return request({
+    url: "/administrators/updateorderstatusbyorderid",
+    method: "POST",
+    params: { ordersId,orderStatus },
+  });
+}
+
+// 设置订单为已完成
+export function setordercompleteApi(ordersId: number,payType:number): AxiosPromise<any> {
+  return request({
+    url: "/administrators/updateorderstatuscomplete",
+    method: "POST",
+    params: { ordersId ,payType},
+  });
+}

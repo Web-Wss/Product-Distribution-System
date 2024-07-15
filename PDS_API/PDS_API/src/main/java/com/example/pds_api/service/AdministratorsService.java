@@ -33,4 +33,13 @@ public interface AdministratorsService extends IService<Administrators> {
 //    获取订单列表
     List<Orders> getOrderList();
 
+//    获取订单列表根据用户id
+    List<Orders> getOrderListByUserId(Integer userId);
+
+//    修改订单进度根据订单id
+    Integer updateOrderStatusByOrderId(Integer ordersId, Integer orderStatus);
+
+//    修改订单已完成进度
+    Integer updateOrderStatusComplete(Integer ordersId,  Integer pay);
+
 }

@@ -75,6 +75,9 @@ const getOrderInfo = async () => {
   orderInfo.value = res.data.data;
   active.value = res.data.data[0].orders.orderStatus - 1;
 };
+
+// 支付方式
+const payType = ref(["微信支付", "支付宝支付", "现金支付"]);
 onMounted(() => {
   getOrderInfo();
 });
@@ -147,7 +150,10 @@ onMounted(() => {
           title="订单完成时间"
           :value="orderInfo[0].orders.completionTime"
         />
-        <van-cell title="支付方式" :value="orderInfo[0].orders.payType" />
+        <van-cell
+          title="支付方式"
+          :value="payType[orderInfo[0].orders.payType - 1]"
+        />
         <van-cell title="备注信息" :value="orderInfo[0].orders.orderRemarks" />
       </van-cell-group>
     </div>

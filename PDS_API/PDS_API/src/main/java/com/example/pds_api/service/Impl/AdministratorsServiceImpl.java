@@ -11,7 +11,9 @@ import com.example.pds_api.utils.GetSevenDate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -123,4 +125,39 @@ public class AdministratorsServiceImpl extends ServiceImpl<AdministratorsMapper,
         List<Orders> orders = ordersMapper.selectList(queryWrapper);
         return orders;
     }
+
+    @Override
+    public List<Orders> getOrderListByUserId(Integer userId) {
+        QueryWrapper<Orders> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", userId)
+                .orderByDesc("order_create_time");
+        List<Orders> orders = ordersMapper.selectList(queryWrapper);
+        return orders;
+    }
+
+    @Override
+    public Integer updateOrderStatusByOrderId(Integer ordersId, Integer orderStatus) {
+        QueryWrapper<Orders> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("orders_id", ordersId);
+        Orders orders = new Orders();
+        orders.setOrderStatus(orderStatus);
+        int update = ordersMapper.update(orders, queryWrapper);
+        return update;
+    }
+
+    @Override
+    public Integer updateOrderStatusComplete(Integer ordersId, Integer pay) {
+        QueryWrapper<Orders> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("orders_id", ordersId);
+        Orders orders = new Orders();
+        orders.setOrderStatus(4);
+        orders.setPayType(pay);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String time = sdf.format(new Date());
+        orders.setCompletionTime(time);
+        int update = ordersMapper.update(orders, queryWrapper);
+        return update;
+    }
+
+
 }

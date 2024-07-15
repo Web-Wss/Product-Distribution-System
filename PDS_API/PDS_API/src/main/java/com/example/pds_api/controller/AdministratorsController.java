@@ -74,5 +74,31 @@ public class AdministratorsController {
     }
 
 
+//    获取订单列表根据用户id
+    @GetMapping("/getorderlistbyuserid")
+    public Result getOrderListByUserId(@RequestParam("userId")Integer userId) {
+        List<Orders> orderListByUserId = administratorsService.getOrderListByUserId(userId);
+        return Result.success("获取用户订单列表根据用户id",orderListByUserId);
+    }
+
+//    修改订单进度根据订单id
+    @PostMapping("/updateorderstatusbyorderid")
+    public Result updateOrderStatusByOrderId(@RequestParam("ordersId")Integer ordersId,
+                                            @RequestParam("orderStatus")Integer orderStatus) {
+        Integer integer = administratorsService.updateOrderStatusByOrderId(ordersId, orderStatus);
+        return Result.success("修改成功",integer);
+    }
+
+//    修改订单已完成进度
+    @PostMapping("/updateorderstatuscomplete")
+    public Result updateOrderStatusComplete(@RequestParam("ordersId")Integer ordersId,
+                                            @RequestParam("payType")Integer payType) {
+        Integer integer = administratorsService.updateOrderStatusComplete(ordersId, payType);
+        if (integer == 1) {
+            return Result.success("修改成功",integer);
+        }
+        return Result.success("修改失败",integer);
+    }
+
 
 }

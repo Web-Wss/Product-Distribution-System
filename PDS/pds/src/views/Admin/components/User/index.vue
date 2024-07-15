@@ -2,6 +2,8 @@
 import { onMounted, ref } from "vue";
 import { showToast } from "vant";
 import { getuserlistApi } from "@/apis/admin";
+import { useRouter } from "vue-router";
+const router = useRouter();
 
 // 用户列表
 const userList = ref([]);
@@ -17,7 +19,15 @@ const getUserList = async () => {
   userList.value = res.data.data;
 };
 
-const onEdit = () => showToast("edit");
+const goOrder = (item) => {
+  console.log(item);
+  router.push({
+    path: "/auserorder",
+    query: {
+      userId: item.userId,
+    },
+  });
+};
 
 onMounted(() => {
   getUserList();
@@ -36,7 +46,7 @@ onMounted(() => {
       v-for="item in userList"
       :tel="item.tel"
       :name="item.name"
-      @click="onEdit"
+      @click="goOrder(item)"
     />
   </div>
 </template>

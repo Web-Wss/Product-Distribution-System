@@ -24,6 +24,7 @@ const Admin = () => import("@/views/Admin/index.vue")
 const AData = () => import("@/views/Admin/components/Data/index.vue")
 const AGoods = () => import("@/views/Admin/components/Goods/index.vue")
 const AUser = () => import("@/views/Admin/components/User/index.vue")
+const AUserOrder = () => import("@/views/Admin/components/User/components/UserOrder/index.vue")
 const ADistributor = () => import("@/views/Admin/components/Distributor/index.vue")
 const AOrder = () => import("@/views/Admin/components/Order/index.vue")
 const ASystem = () => import("@/views/Admin/components/System/index.vue")
@@ -201,7 +202,16 @@ const routes: Array<RouteRecordRaw> = [
         name: "AUser",
         component:AUser,
         meta: {
-          title: "会员中心",
+          title: "用户中心",
+          keepAlive: true,
+        }
+      },
+      {
+        path: "/auserorder",
+        name: "AUserOrder",
+        component:AUserOrder,
+        meta: {
+          title: "用户订单",
           keepAlive: true,
         }
       },

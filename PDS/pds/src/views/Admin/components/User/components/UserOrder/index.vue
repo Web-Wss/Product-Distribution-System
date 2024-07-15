@@ -1,24 +1,23 @@
 <script setup>
-import { onMounted, ref } from "vue";
-
-import { useDistributorStore } from "@/store/distributor";
 import {
-  getorderlistApi,
+  getuserinfobyidApi,
   setordercompleteApi,
   updateorderstatusApi,
 } from "@/apis/admin";
-const distributorStore = useDistributorStore();
-
+import { onMounted, ref } from "vue";
+import { useRoute } from "vue-router";
+// 获取参数
+const route = useRoute();
 const activeNames = ref("1");
 const active = ref(1);
-
-// 订单列表
-const orderList = ref([]);
-
-const getOrderList = async () => {
-  const res = await getorderlistApi();
-  console.log(res);
-  orderList.value = res.data.data;
+// const userId = route.query.userId;
+const userId = ref();
+// 获取用户订单列表根据用户id
+const userOrderList = ref([]);
+const getUserOrderList = async () => {
+  const res = await getuserinfobyidApi(userId.value);
+  userOrderList.value = res.data.data;
+  console.log(userOrderList.value);
 };
 
 // 状态
@@ -37,7 +36,9 @@ const onConfirm = async ({ selectedOptions }) => {
     EditOrdersId.value,
     selectedOptions[0].value
   );
-  getOrderList();
+  console.log(res);
+  getUserOrderList();
+
   showPicker.value = false;
 };
 // 修改为已完成
@@ -45,21 +46,28 @@ const show = ref(false);
 const checked = ref("1");
 const editComplate = async () => {
   const res = await setordercompleteApi(EditOrdersId.value, checked.value);
+  getUserOrderList();
+
   console.log(res);
-  getOrderList();
 };
 
 onMounted(() => {
-  getOrderList();
+  userId.value = route.query.userId;
+  getUserOrderList();
 });
 </script>
 
 <template>
-  <div class="order">
+  <div class="userorder">
+    <van-divider
+      :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"
+    >
+      用户id为{{ userId }}的订单列表
+    </van-divider>
     <div class="list">
       <div
         class="item"
-        v-for="item in orderList"
+        v-for="item in userOrderList"
         :key="item.ordersId"
         @click="EditOrdersId = item.ordersId"
       >
