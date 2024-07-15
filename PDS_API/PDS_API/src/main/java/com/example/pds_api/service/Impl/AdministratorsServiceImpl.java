@@ -8,9 +8,11 @@ import com.example.pds_api.model.DTO.GoodsDTO;
 import com.example.pds_api.model.VO.DistributorVO;
 import com.example.pds_api.service.AdministratorsService;
 import com.example.pds_api.utils.GetSevenDate;
+import com.example.pds_api.utils.JWTUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,6 +32,28 @@ public class AdministratorsServiceImpl extends ServiceImpl<AdministratorsMapper,
     private DistributorMapper distributorMapper;
     @Resource
     private UserMapper userMapper;
+    @Resource
+    private WebsiteMapper websiteMapper;
+    @Resource
+    private NoticeMapper noticeMapper;
+    @Resource
+    private ReductionMapper reductionMapper;
+
+    @Override
+    public HashMap<String, Object> login(String phone, String password) {
+        HashMap<String, Object> map = new HashMap<>();
+        QueryWrapper<Administrators> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("phone", phone)
+                .eq("password", password);
+        Administrators administrators = administratorsMapper.selectOne(queryWrapper);
+        if (administrators != null){
+            String token = JWTUtils.generateToken(phone);
+            map.put("token", token);
+            map.put("administrators", administrators);
+            return map;
+        }
+        return null;
+    }
 
     @Override
     public HashMap<String, Object> getDashboardData() {
@@ -156,6 +180,76 @@ public class AdministratorsServiceImpl extends ServiceImpl<AdministratorsMapper,
         String time = sdf.format(new Date());
         orders.setCompletionTime(time);
         int update = ordersMapper.update(orders, queryWrapper);
+        return update;
+    }
+
+    @Override
+    public HashMap<String, Object> getSystemInfo() {
+        HashMap<String, Object> map = new HashMap<>();
+//        获取站点信息
+        QueryWrapper<Website> websiteQueryWrapper = new QueryWrapper<>();
+        websiteQueryWrapper.eq("website_id", 1);
+        Website website = websiteMapper.selectOne(websiteQueryWrapper);
+//        获取通知管理信息
+        QueryWrapper<Notice> noticeQueryWrapper = new QueryWrapper<>();
+        noticeQueryWrapper.eq("notice_id", 1);
+        Notice notice = noticeMapper.selectOne(noticeQueryWrapper);
+//        获取满减规则
+        List<Reduction> reductions = reductionMapper.selectList(null);
+//        获取登录密码
+        QueryWrapper<Administrators> administratorsQueryWrapper = new QueryWrapper<>();
+        administratorsQueryWrapper.eq("administrators_id", 1);
+        Administrators administrators = administratorsMapper.selectOne(administratorsQueryWrapper);
+        map.put("website", website);
+        map.put("notice", notice);
+        map.put("reductions", reductions);
+        map.put("administrators", administrators);
+        return map;
+    }
+
+    @Override
+    public Integer updateSiteInfo(String path) {
+        QueryWrapper<Website> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("website_id", 1);
+        Website website = new Website();
+        website.setWebsitePath(path);
+        int update = websiteMapper.update(website, queryWrapper);
+        return update;
+    }
+
+    @Override
+    public Integer updateNoticeInfo(String noticeContent) {
+        QueryWrapper<Notice> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("notice_id", 1);
+        Notice notice = new Notice();
+        notice.setNoticeContent(noticeContent);
+        int update = noticeMapper.update(notice, queryWrapper);
+        return update;
+    }
+
+    @Override
+    public List<Reduction> getReductionInfo() {
+        return reductionMapper.selectList(null);
+    }
+
+    @Override
+    public Integer updateReductionInfo(Integer reductionId, BigDecimal fullConditionPrice, BigDecimal fullReductionAmount) {
+        QueryWrapper<Reduction> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("full_reduction_id", reductionId);
+        Reduction reduction = new Reduction();
+        reduction.setFullConditionPrice(fullConditionPrice);
+        reduction.setFullReductionAmount(fullReductionAmount);
+        int update = reductionMapper.update(reduction, queryWrapper);
+        return update;
+    }
+
+    @Override
+    public Integer updatePassword(String password) {
+        QueryWrapper<Administrators> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("administrators_id", 1);
+        Administrators administrators = new Administrators();
+        administrators.setPassword(password);
+        int update = administratorsMapper.update(administrators, queryWrapper);
         return update;
     }
 

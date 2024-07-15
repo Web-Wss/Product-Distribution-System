@@ -1,14 +1,12 @@
 package com.example.pds_api.controller;
 
+import com.example.pds_api.model.*;
 import com.example.pds_api.model.DTO.GoodsDTO;
-import com.example.pds_api.model.Goods;
-import com.example.pds_api.model.Orders;
-import com.example.pds_api.model.Result;
-import com.example.pds_api.model.User;
 import com.example.pds_api.service.AdministratorsService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 
@@ -18,6 +16,16 @@ public class AdministratorsController {
 
     @Resource
     private AdministratorsService administratorsService;
+
+
+
+//    管理员登录
+    @PostMapping("/login")
+    public Result login(@RequestParam("phone")String phone,
+                        @RequestParam("password")String password) {
+        HashMap<String, Object> login = administratorsService.login(phone, password);
+        return Result.success("管理员登录",login);
+    }
 
 
 //    获取经营看板数据
@@ -99,6 +107,54 @@ public class AdministratorsController {
         }
         return Result.success("修改失败",integer);
     }
+
+
+//    获取系统相关信息
+    @GetMapping("/getsysteminfo")
+    public Result getSystemInfo() {
+        HashMap<String, Object> systemInfo = administratorsService.getSystemInfo();
+        return Result.success("系统相关信息",systemInfo);
+    }
+
+//    修改站点信息
+    @PostMapping("/updatesiteinfo")
+    public Result updateSiteInfo(@RequestParam("path")String path) {
+        Integer integer = administratorsService.updateSiteInfo(path);
+        return Result.success("修改成功",integer);
+    }
+
+
+//    编辑通知信息
+    @PostMapping("/updatenoticeinfo")
+    public Result updateNoticeInfo(@RequestParam("noticeContent")String noticeContent) {
+        Integer integer = administratorsService.updateNoticeInfo(noticeContent);
+        return Result.success("修改成功",integer);
+    }
+
+//    获取满减规则信息
+    @GetMapping("/getreductioninfo")
+    public Result getReductionInfo() {
+        List<Reduction> reductionInfo = administratorsService.getReductionInfo();
+        return Result.success("满减规则信息",reductionInfo);
+    }
+
+//    编辑满减信息
+    @PostMapping("/updatereductioninfo")
+    public Result updateReductionInfo(@RequestParam("reductionId")Integer reductionId,
+                                     @RequestParam("fullConditionPrice") BigDecimal fullConditionPrice,
+                                     @RequestParam("fullReductionAmount")BigDecimal fullReductionAmount) {
+        Integer integer = administratorsService.updateReductionInfo(reductionId, fullConditionPrice, fullReductionAmount);
+        return Result.success("修改成功",integer);
+    }
+
+
+//    修改登录密码
+    @PostMapping("/updatepassword")
+    public Result updatePassword(@RequestParam("password")String password) {
+        Integer integer = administratorsService.updatePassword(password);
+        return Result.success("修改成功",integer);
+    }
+
 
 
 }

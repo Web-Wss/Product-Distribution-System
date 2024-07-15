@@ -1,16 +1,17 @@
 package com.example.pds_api.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.example.pds_api.model.Administrators;
+import com.example.pds_api.model.*;
 import com.example.pds_api.model.DTO.GoodsDTO;
-import com.example.pds_api.model.Goods;
-import com.example.pds_api.model.Orders;
-import com.example.pds_api.model.User;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 
 public interface AdministratorsService extends IService<Administrators> {
+
+//    管理员登录
+    HashMap<String, Object> login(String phone, String password);
 
 //    获取经营看板数据
     HashMap<String, Object> getDashboardData();
@@ -41,5 +42,24 @@ public interface AdministratorsService extends IService<Administrators> {
 
 //    修改订单已完成进度
     Integer updateOrderStatusComplete(Integer ordersId,  Integer pay);
+
+//    获取系统信息
+    HashMap<String, Object> getSystemInfo();
+
+//    修改站点信息
+    Integer updateSiteInfo(String path);
+
+//    编辑通知信息
+    Integer updateNoticeInfo(String noticeContent);
+
+//    获取满减规则信息
+    List<Reduction> getReductionInfo();
+
+//    编辑满减信息
+    Integer updateReductionInfo(Integer reductionId, BigDecimal fullConditionPrice, BigDecimal fullReductionAmount);
+
+//    修改登录密码
+    Integer updatePassword(String password);
+
 
 }

@@ -28,7 +28,8 @@ const AUserOrder = () => import("@/views/Admin/components/User/components/UserOr
 const ADistributor = () => import("@/views/Admin/components/Distributor/index.vue")
 const AOrder = () => import("@/views/Admin/components/Order/index.vue")
 const ASystem = () => import("@/views/Admin/components/System/index.vue")
-
+const AReduction = () => import("@/views/Admin/components/System/components/Reduction/index.vue")
+const ALogin = () => import("@/views/Admin/components/Login/index.vue")
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
@@ -239,6 +240,24 @@ const routes: Array<RouteRecordRaw> = [
         component:ASystem,
         meta: {
           title: "系统管理",
+          keepAlive: true,
+        }
+      },
+      {
+        path: "/areduction",
+        name: "AReduction",
+        component:AReduction,
+        meta: {
+          title: "满减规则",
+          keepAlive: true,
+        }
+      },
+      {
+        path: "/alogin",
+        name: "ALogin",
+        component:ALogin,
+        meta: {
+          title: "管理员登陆",
           keepAlive: true,
         }
       },

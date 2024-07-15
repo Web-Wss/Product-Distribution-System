@@ -1,6 +1,15 @@
 import request from "@/utils/request";
 import { AxiosPromise } from "axios";
 
+// 管理员登录
+export function adminloginApi(phone: string,password: string): AxiosPromise<any> {
+  return request({
+    url: "/administrators/login",
+    method: "post",
+    params: { phone,password },
+  });
+}
+
 // 获取数据看板数据
 export function getdashboarddataApi(): AxiosPromise<any> {
   return request({
@@ -93,5 +102,57 @@ export function setordercompleteApi(ordersId: number,payType:number): AxiosPromi
     url: "/administrators/updateorderstatuscomplete",
     method: "POST",
     params: { ordersId ,payType},
+  });
+}
+
+// 获取系统相关信息
+export function getsysteminfoApi(): AxiosPromise<any> {
+  return request({
+    url: "/administrators/getsysteminfo",
+    method: "get",
+  });
+}
+
+// 编辑站点信息
+export function editsiteinfoApi(path: string): AxiosPromise<any> {
+  return request({
+    url: "/administrators/updatesiteinfo",
+    method: "post",
+    params: { path },
+  });
+}
+
+// 编辑通知信息
+export function editnoticeinfoApi(noticeContent: string): AxiosPromise<any> {
+  return request({
+    url: "/administrators/updatenoticeinfo",
+    method: "post",
+    params: { noticeContent },
+  });
+}
+
+// 获取满减规则信息
+export function getreductionApi(): AxiosPromise<any> {
+  return request({
+    url: "/administrators/getreductioninfo",
+    method: "get",
+  });
+}
+
+// 编辑满减信息
+export function editreductionApi(reductionId: number,fullConditionPrice:number,fullReductionAmount:number): AxiosPromise<any> {
+  return request({
+    url: "/administrators/updatereductioninfo",
+    method: "post",
+    params: { reductionId,fullConditionPrice,fullReductionAmount },
+  });
+}
+
+// 修改登录密码
+export function editpasswordApi(password:string): AxiosPromise<any> {
+  return request({
+    url: "/administrators/updatepassword",
+    method: "post",
+    params: { password },
   });
 }
