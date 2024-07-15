@@ -172,6 +172,15 @@ const routes: Array<RouteRecordRaw> = [
     ]
   },
   {
+    path: "/alogin",
+    name: "ALogin",
+    component:ALogin,
+    meta: {
+      title: "管理员登陆",
+      keepAlive: true,
+    }
+  },
+  {
     path: "/admin",
     name: "Admin",
     component:Admin,
@@ -252,15 +261,7 @@ const routes: Array<RouteRecordRaw> = [
           keepAlive: true,
         }
       },
-      {
-        path: "/alogin",
-        name: "ALogin",
-        component:ALogin,
-        meta: {
-          title: "管理员登陆",
-          keepAlive: true,
-        }
-      },
+   
     ]
   },
 ];
