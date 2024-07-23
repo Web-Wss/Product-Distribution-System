@@ -44,11 +44,24 @@
 - 后端配置数据库连接：打开application.yml文件，配置数据库连接信息
 
 ```properties
-datasource:
+spring:
+  datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/pds
-    username: you-username
-    password: you-password
+    username: username
+    password: password
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: -1
+      max-request-size: -1
+mybatis:
+  type-aliases-package: com.example.pds_api.model
+mybatis-plus:
+  type-aliases-package: com.example.pds_api.model
+  mapper-locations: classpath:Mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
 ```
 
 - 运行后端项目：端口：8080
