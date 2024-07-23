@@ -7,12 +7,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @TableName("user")
-public class User{
-
+public class User {
     @TableId(type = IdType.AUTO)
     private Integer userId;
 

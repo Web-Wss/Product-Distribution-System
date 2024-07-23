@@ -18,7 +18,6 @@ public class GenerateOrderDTO {
     private Integer distributorId;//分销商id
     private BigDecimal orderActualPayment;//订单实付金额
     private BigDecimal orderDiscountPrice;//订单优惠金额
-    private List<Cart> orderGoodsList;//订单商品列表
     private BigDecimal orderTotalPrice;//订单总金额
     private String remark;//备注
     private Integer userId;//用户id

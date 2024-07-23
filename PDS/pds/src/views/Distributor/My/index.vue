@@ -2,13 +2,14 @@
 import { onMounted, ref } from "vue";
 import { useDistributorStore } from "@/store/distributor";
 import { changePasswordApi } from "@/apis/distributor";
+import { useRouter } from "vue-router";
 const distributorStore = useDistributorStore();
-
+const router = useRouter();
 const tel = ref("18888888888");
 const name = ref("分销员1");
 const distributorId = ref(111111);
 const onEdit = () => {
-  console.log("点击了");
+  // console.log("点击了");
 };
 
 // 修改密码
@@ -25,7 +26,7 @@ const editpassword = () => {
 };
 const editBtn = async () => {
   const res = await changePasswordApi(editpasswordInfo.value);
-  console.log(res);
+  // console.log(res);
   if (res.data.code == 200) {
     show.value = false;
     showNotify({ type: "success", message: "密码修改成功" });
@@ -36,6 +37,14 @@ const editBtn = async () => {
       newDPassword: "",
     };
   }
+};
+
+// 退出登录
+const logout = () => {
+  distributorStore.clearDistributorInfo();
+  router.replace({
+    path: "/login",
+  });
 };
 
 onMounted(() => {
@@ -61,7 +70,7 @@ onMounted(() => {
     </van-cell>
     <!-- 退出登录 -->
     <div class="button">
-      <van-button type="danger">退出登录</van-button>
+      <van-button type="danger" @click="logout">退出登录</van-button>
     </div>
   </div>
 

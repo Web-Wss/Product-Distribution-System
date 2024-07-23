@@ -1,7 +1,6 @@
 package com.example.pds_api.model.DTO;
 
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.example.pds_api.model.GoodsClassification;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,8 +24,10 @@ public class GoodsDTO {
 
     private String goodsCompany;//商品单位
 
-    private Integer goodsTotalInventory;//商品库存
+    private Integer goodsInventorySum;//商品库存
 
-    private Integer remainingInventory;//剩余库存
+//    private Integer goodsTotalInventory;//商品库存
+//
+//    private Integer remainingInventory;//剩余库存
 
 }

@@ -10,7 +10,7 @@ const price = ref([]);
 // 获取数据
 const getData = async () => {
   const res = await getdashboarddataApi();
-  console.log(res.data.data);
+  // console.log(res.data.data);
   if (res.data.code == 200) {
     date.value = res.data.data.date;
     price.value = res.data.data.price;

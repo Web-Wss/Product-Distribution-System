@@ -10,12 +10,39 @@ import java.util.Map;
 
 public class JWTInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        System.out.println("JWT");
+        String url = request.getRequestURI();
+        // 获取URL的前缀，这里假设前缀以"/"开始
+        String prefix = url.substring(0, url.indexOf("/", 1));
+//        判断访问的路径前缀是否为"/administrators","/user","/distributor"
+//        获取role角色
+        String Role = request.getHeader("Role");
         String token = request.getHeader("Authorization");
-        Map<String,Object> map = JWTUtils.parseToken(token);
-        Object acct = map.get("acct");
-        if (acct != null) {
-            return true;
+//        System.out.println("uri"+prefix);
+//        System.out.println(Role+token);
+//        判断token是否正确，role是否匹配
+        if ((prefix.equals("/administrators") || prefix.equals("/user")) && Role.equals("administrators")) {
+            Map<String,Object> map = JWTUtils.parseToken(token);
+            Object acct = map.get("acct");
+            if (acct != null) {
+//                System.out.println("管理员访问");
+                return true;
+            }
+        }
+        if ((prefix.equals("/user") || prefix.equals("/goods")) && Role.equals("user")) {
+            Map<String,Object> map = JWTUtils.parseToken(token);
+            Object acct = map.get("acct");
+            if (acct != null) {
+//                System.out.println("用户访问");
+                return true;
+            }
+        }
+        if (prefix.equals("/distributor") && Role.equals("distributor")) {
+            Map<String,Object> map = JWTUtils.parseToken(token);
+            Object acct = map.get("acct");
+            if (acct != null) {
+//                System.out.println("分销商访问");
+                return true;
+            }
         }
         return false;
     }

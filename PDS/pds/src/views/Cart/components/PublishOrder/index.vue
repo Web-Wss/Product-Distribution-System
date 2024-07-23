@@ -107,9 +107,9 @@ const getOrderInfo = async () => {
   // 将订单金额和满减规则匹配，计算出满减金额和实付金额
   setTimeout(() => {
     fullReductionRule.value.forEach((item) => {
-      console.log(item);
+      // console.log(item);
       if (item.fullConditionPrice <= orderInfo.value.orderTotalPrice) {
-        console.log("执行了满减", item);
+        // console.log("执行了满减", item);
         orderDiscountPrice.value = item.fullReductionAmount;
         orderActualPayment.value =
           orderInfo.value.orderTotalPrice - item.fullReductionAmount;
@@ -137,7 +137,7 @@ const onSubmit = async () => {
     distributorId: userStore.distributorId,
   };
   const res = await createOrderApi(publishOrderInfo);
-  console.log(publishOrderInfo);
+  // console.log(publishOrderInfo);
   if (res.data.code == 200) {
     // 跳转到订单详情页面
     router.replace({

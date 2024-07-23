@@ -37,7 +37,7 @@ const routes: Array<RouteRecordRaw> = [
     component:Home,
     meta: {
       title: "首页",
-      keepAlive: true,
+      requireAuth: false,
     }
   },
   {
@@ -45,7 +45,8 @@ const routes: Array<RouteRecordRaw> = [
     name: "Cart",
     component:Cart,
     meta: {
-      title: "购物车"
+      title: "购物车",
+      requireAuth: true
     }
   },
   {
@@ -53,7 +54,9 @@ const routes: Array<RouteRecordRaw> = [
     name: "PublishOrder",
     component:PublishOrder,
     meta: {
-      title: "订单结算"
+      title: "订单结算",
+      requireAuth: true
+
     }
   },
   {
@@ -61,7 +64,9 @@ const routes: Array<RouteRecordRaw> = [
     name: "My",
     component:My,
     meta: {
-      title: "我的"
+      title: "我的",
+      requireAuth: true
+
     }
   },
   {
@@ -69,7 +74,9 @@ const routes: Array<RouteRecordRaw> = [
     name: "Address",
     component:Address,
     meta: {
-      title: "地址管理"
+      title: "地址管理",
+      requireAuth: true
+
     }
   },
   {
@@ -77,7 +84,9 @@ const routes: Array<RouteRecordRaw> = [
     name: "Order",
     component:Order,
     meta: {
-      title: "我的订单"
+      title: "我的订单",
+      requireAuth: true
+
     }
   },
   {
@@ -85,7 +94,9 @@ const routes: Array<RouteRecordRaw> = [
     name: "OrderDetail",
     component:OrderDetail,
     meta: {
-      title: "订单详情"
+      title: "订单详情",
+      requireAuth: false
+
     }
   },
   {
@@ -93,7 +104,9 @@ const routes: Array<RouteRecordRaw> = [
     name: "Detail",
     component:Detail,
     meta: {
-      title: "详情"
+      title: "详情",
+      requireAuth: false
+
     }
   },
   {
@@ -101,7 +114,8 @@ const routes: Array<RouteRecordRaw> = [
     name: "Login",
     component:Login,
     meta: {
-      title: "登录"
+      title: "登录",
+      requireAuth: false
     }
   },
 
@@ -112,7 +126,7 @@ const routes: Array<RouteRecordRaw> = [
     component:DLogin,
     meta: {
       title: "分销商登录",
-      keepAlive: true,
+      requireAuth: false
     }
   },
   {
@@ -121,7 +135,7 @@ const routes: Array<RouteRecordRaw> = [
     component:Distributor,
     meta: {
       title: "分销后台",
-      keepAlive: true,
+      requireAuth: true
     },
     children: [
       {
@@ -130,7 +144,7 @@ const routes: Array<RouteRecordRaw> = [
         component:DData,
         meta: {
           title: "分销数据",
-          keepAlive: true,
+      requireAuth: true
         }
       },
       {
@@ -139,7 +153,7 @@ const routes: Array<RouteRecordRaw> = [
         component:DOrder,
         meta: {
           title: "订单管理",
-          keepAlive: true,
+      requireAuth: true
         }
       },
       {
@@ -148,7 +162,7 @@ const routes: Array<RouteRecordRaw> = [
         component:DPromotion,
         meta: {
           title: "营销推广",
-          keepAlive: true,
+      requireAuth: true
         }
       },
       {
@@ -157,7 +171,7 @@ const routes: Array<RouteRecordRaw> = [
         component:CommissionDetail,
         meta: {
           title: "佣金明细",
-          keepAlive: true,
+      requireAuth: true
         }
       },
       {
@@ -166,7 +180,7 @@ const routes: Array<RouteRecordRaw> = [
         component:DMy,
         meta: {
           title: "个人信息",
-          keepAlive: true,
+      requireAuth: true
         }
       },
     ]
@@ -177,7 +191,7 @@ const routes: Array<RouteRecordRaw> = [
     component:ALogin,
     meta: {
       title: "管理员登陆",
-      keepAlive: true,
+      requireAuth: false
     }
   },
   {
@@ -186,7 +200,7 @@ const routes: Array<RouteRecordRaw> = [
     component:Admin,
     meta: {
       title: "管理员后台",
-      keepAlive: true,
+      requireAuth: true
     },
     children: [
       {
@@ -195,7 +209,7 @@ const routes: Array<RouteRecordRaw> = [
         component:AData,
         meta: {
           title: "经营看板",
-          keepAlive: true,
+      requireAuth: true
         }
       },
       {
@@ -204,7 +218,7 @@ const routes: Array<RouteRecordRaw> = [
         component:AGoods,
         meta: {
           title: "商品中心",
-          keepAlive: true,
+      requireAuth: true
         }
       },
       {
@@ -213,7 +227,7 @@ const routes: Array<RouteRecordRaw> = [
         component:AUser,
         meta: {
           title: "用户中心",
-          keepAlive: true,
+      requireAuth: true
         }
       },
       {
@@ -222,7 +236,7 @@ const routes: Array<RouteRecordRaw> = [
         component:AUserOrder,
         meta: {
           title: "用户订单",
-          keepAlive: true,
+      requireAuth: true
         }
       },
       {
@@ -231,7 +245,7 @@ const routes: Array<RouteRecordRaw> = [
         component:ADistributor,
         meta: {
           title: "分销管理",
-          keepAlive: true,
+      requireAuth: true
         }
       },
       {
@@ -240,7 +254,7 @@ const routes: Array<RouteRecordRaw> = [
         component:AOrder,
         meta: {
           title: "交易中心",
-          keepAlive: true,
+      requireAuth: true
         }
       },
       {
@@ -249,7 +263,7 @@ const routes: Array<RouteRecordRaw> = [
         component:ASystem,
         meta: {
           title: "系统管理",
-          keepAlive: true,
+      requireAuth: true
         }
       },
       {
@@ -258,7 +272,7 @@ const routes: Array<RouteRecordRaw> = [
         component:AReduction,
         meta: {
           title: "满减规则",
-          keepAlive: true,
+      requireAuth: true
         }
       },
    

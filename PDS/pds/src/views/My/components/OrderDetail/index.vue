@@ -12,7 +12,7 @@ const stepList = ref([
   { id: 2, text: "分拣中" },
   { id: 3, text: "配送中" },
   { id: 4, text: "已完成" },
-  { id: 5, text: "已取消" },
+  // { id: 5, text: "已取消" },
 ]);
 const active = ref(1);
 
@@ -71,7 +71,7 @@ const orderId = ref(route.query.ordersId);
 // 获取订单信息
 const getOrderInfo = async () => {
   const res = await getOrderDetailApi(orderId.value);
-  console.log(res);
+  // console.log(res);
   orderInfo.value = res.data.data;
   active.value = res.data.data[0].orders.orderStatus - 1;
 };

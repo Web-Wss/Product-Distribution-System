@@ -8,7 +8,7 @@ interface DistributorLoginParams {
 }
 export function distributorLoginApi(data: DistributorLoginParams):AxiosPromise<any> {
   return request({
-    url: "/distributor/login",
+    url: "/login/distributorlogin",
     method: "post",
     data,
   });

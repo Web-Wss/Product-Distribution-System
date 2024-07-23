@@ -11,7 +11,6 @@ import com.example.pds_api.model.Orders;
 import com.example.pds_api.model.Website;
 import com.example.pds_api.service.DistributorService;
 import com.example.pds_api.utils.GetSevenDate;
-import com.example.pds_api.utils.JWTUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -32,33 +31,7 @@ public class DistributorServiceImpl extends ServiceImpl<DistributorMapper, Distr
 
 
     @Override
-    public HashMap<String, Object> login(LoginDTO loginDTO) {
-        HashMap<String, Object> map = new HashMap<>();
-        Distributor distributor = new Distributor();
-        distributor.setPhone(loginDTO.getPhone());
-        distributor.setPassword(loginDTO.getPassword());
-        QueryWrapper<Distributor> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("phone", loginDTO.getPhone())
-                        .eq("password", loginDTO.getPassword());
-        Distributor distributor1 = distributorMapper.selectOne(queryWrapper);
-        if (distributor1 != null) {
-            String token = JWTUtils.generateToken(loginDTO.getPhone());
-            distributor.setDistributorId(distributor1.getDistributorId());
-            distributor.setNickname(distributor1.getNickname());
-            distributor.setPhone(distributor1.getPhone());
-            distributor.setPassword(null);
-            distributor.setStatus(distributor1.getStatus());
-            distributor.setCreateTime(distributor1.getCreateTime());
-            distributor.setCommissionRate(distributor1.getCommissionRate());
-            map.put("token", token);
-            map.put("distributor", distributor);
-            return map;
-        }
-        return null;
-    }
-
-    @Override
-    public HashMap<String, Object> getDashboardData(Integer distributorId) {
+    public Object getDashboardData(Integer distributorId) {
         HashMap<String, Object> map = new HashMap<>();
         HashMap<String, Object> param = new HashMap<>();
         List<String> date = new ArrayList<>();
@@ -89,7 +62,7 @@ public class DistributorServiceImpl extends ServiceImpl<DistributorMapper, Distr
     }
 
     @Override
-    public List<Orders> getOrderListByDistributorId(Integer distributorId) {
+    public Object getOrderListByDistributorId(Integer distributorId) {
         QueryWrapper<Orders> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("distributor_id", distributorId).orderByDesc("orders_id");
         List<Orders> orders = ordersMapper.selectList(queryWrapper);
@@ -141,12 +114,10 @@ public class DistributorServiceImpl extends ServiceImpl<DistributorMapper, Distr
         }
         if (loginDTO.getNewPassword().equals(loginDTO.getNewDPassword())){
             distributor1.setPassword(loginDTO.getNewPassword());
-            System.out.println("执行修改"+distributor1);
+//            System.out.println("执行修改"+distributor1);
 //            执行修改密码
             return distributorMapper.update(distributor1, new QueryWrapper<Distributor>().eq("phone", loginDTO.getPhone()));
         }
         return 0;
     }
-
-
 }

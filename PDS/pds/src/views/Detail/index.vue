@@ -1,10 +1,12 @@
 <script setup>
 import { getGoodsDetailByIdApi, addGoodsToCartApi } from "@/apis/user/home";
 import { onMounted, ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useUserStore } from "@/store/user";
+import storage from "@/utils/storage";
 
 const route = useRoute();
+const router = useRouter();
 const userStore = useUserStore();
 
 const goodsId = route.query.goodsId;
@@ -13,61 +15,89 @@ const goodsId = route.query.goodsId;
 const onClickLeft = () => history.back();
 
 // 底部
-const onClickIcon = () => showToast("点击图标");
+const onClickIcon = (item) => {
+  if (item == 1) {
+    router.replace({ path: "/" });
+  }
+  if (item == 2) {
+    router.replace({ path: "/cart" });
+  }
+  if (item == 3) {
+    router.replace({ path: "/my" });
+  }
+};
 
 // 加购面板
-const show = ref(false);
-// 加购
-const onClickButton = () => {
-  cartInfo.value = {
+// const show = ref(false);
+// // 加购
+// const onClickButton = () => {
+//   cartInfo.value = {
+//     goodsId: goodsInfo.value.goodsId,
+//     goodsImg: goodsInfo.value.goodsImg,
+//     goodsName: goodsInfo.value.goodsName,
+//     goodsPrice: goodsInfo.value.goodsPrice,
+//     remainingInventory: goodsInfo.value.remainingInventory,
+//     goodsNumber: 1,
+//   };
+//   show.value = true;
+// };
+// const cartInfo = ref({
+//   goodsId: "",
+//   goodsImg: "",
+//   goodsName: "",
+//   goodsPrice: "",
+//   remainingInventory: "",
+//   goodsNumber: "",
+//   goodsInventory: {
+//     goodsInventorySum: "",
+//   },
+// });
+// 面板加购按钮
+const onClickButton = async () => {
+  // 判断是否登录，未登录跳转登录
+  const user = storage.get("user");
+  if (user == null) {
+    router.push({ path: "/login" });
+  }
+  // 加工加购数据
+  const AddGoodsToCartData = {
+    userId: userStore.userInfo.userId,
     goodsId: goodsInfo.value.goodsId,
-    goodsImg: goodsInfo.value.goodsImg,
-    goodsName: goodsInfo.value.goodsName,
-    goodsPrice: goodsInfo.value.goodsPrice,
-    remainingInventory: goodsInfo.value.remainingInventory,
-    goodsNumber: 1,
+    // goodsNumber: cartInfo.value.goodsNumber,
+    // remainingInventory: cartInfo.value.remainingInventory,
   };
-  show.value = true;
+  const res = await addGoodsToCartApi(AddGoodsToCartData);
+  if (res.data.code === 200) {
+    // console.log("加购成功");
+    showNotify({ type: "success", message: "加购成功" });
+    // show.value = false;
+    // cartInfo.value = {
+    //   goodsId: "",
+    //   goodsImg: "",
+    //   goodsName: "",
+    //   goodsPrice: "",
+    //   remainingInventory: "",
+    //   goodsNumber: "",
+    // };
+  }
 };
-const cartInfo = ref({
+
+// 查询商品详情根据id
+const goodsInfo = ref({
   goodsId: "",
   goodsImg: "",
   goodsName: "",
   goodsPrice: "",
   remainingInventory: "",
   goodsNumber: "",
+  goodsInventory: {
+    goodsInventorySum: "",
+  },
 });
-// 面板加购按钮
-const addCartToCart = async () => {
-  // 加工加购数据
-  const AddGoodsToCartData = {
-    userId: userStore.userInfo.userId,
-    goodsId: cartInfo.value.goodsId,
-    goodsNumber: cartInfo.value.goodsNumber,
-    remainingInventory: cartInfo.value.remainingInventory,
-  };
-  const res = await addGoodsToCartApi(AddGoodsToCartData);
-  if (res.data.code === 200) {
-    // console.log("加购成功");
-    showNotify({ type: "success", message: "加购成功" });
-    show.value = false;
-    cartInfo.value = {
-      goodsId: "",
-      goodsImg: "",
-      goodsName: "",
-      goodsPrice: "",
-      remainingInventory: "",
-      goodsNumber: "",
-    };
-  }
-};
-
-// 查询商品详情根据id
-const goodsInfo = ref({});
 const getGoodsInfo = async () => {
-  await getGoodsDetailByIdApi(goodsId).then((res) => {
-    goodsInfo.value = res.data.data;
-  });
+  const res = await getGoodsDetailByIdApi(goodsId);
+  // console.log(res);
+  goodsInfo.value = res.data.data;
 };
 onMounted(() => {
   getGoodsInfo();
@@ -96,7 +126,9 @@ onMounted(() => {
       <div class="old-price">
         市场价：{{ goodsInfo.goodsOldPrice }}元/{{ goodsInfo.goodsCompany }}
       </div>
-      <div class="inventory">库存：{{ goodsInfo.remainingInventory }}</div>
+      <div class="inventory">
+        库存：{{ goodsInfo.goodsInventory.goodsInventorySum }}
+      </div>
     </div>
     <!-- 分割线 -->
     <!-- 视频 -->
@@ -116,18 +148,24 @@ onMounted(() => {
   </div>
   <!-- 底部 -->
   <van-action-bar>
-    <van-action-bar-icon icon="home-o" text="选购" @click="onClickIcon" />
-    <van-action-bar-icon icon="cart-o" text="购物车" @click="onClickIcon" />
-    <van-action-bar-icon icon="manager-o" text="我的" @click="onClickIcon" />
+    <van-action-bar-icon icon="home-o" text="选购" @click="onClickIcon(1)" />
+    <van-action-bar-icon icon="cart-o" text="购物车" @click="onClickIcon(2)" />
+    <van-action-bar-icon icon="manager-o" text="我的" @click="onClickIcon(3)" />
     <van-action-bar-button
+      v-if="goodsInfo.goodsInventory.goodsInventorySum"
       type="danger"
       text="加入购物车"
       @click="onClickButton"
     />
+    <van-action-bar-button
+      type="warning"
+      text="已售罄"
+      v-if="!goodsInfo.goodsInventory.goodsInventorySum"
+    />
   </van-action-bar>
 
   <!-- 加购面板 -->
-  <van-action-sheet v-model:show="show" title="加购">
+  <!-- <van-action-sheet v-model:show="show" title="加购">
     <div class="content1">
       <div class="img">
         <img :src="cartInfo.goodsImg" alt="" />
@@ -155,12 +193,13 @@ onMounted(() => {
         >加入购物车</van-button
       >
     </div>
-  </van-action-sheet>
+  </van-action-sheet> -->
 </template>
 
 <style scoped lang="scss">
 .detail {
-  margin-top: 46px;
+  // margin-top: 46px;
+  padding-top: 46px;
   margin-bottom: 40px;
   .img {
     width: 100%;
@@ -192,6 +231,7 @@ onMounted(() => {
   // 视频
   .sp {
     width: 100%;
+    padding-bottom: 60px;
   }
 }
 

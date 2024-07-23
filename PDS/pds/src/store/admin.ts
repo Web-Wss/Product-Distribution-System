@@ -18,7 +18,7 @@ export const useAdminStore = defineStore("admin",()=>{
     storage.removeAll()
     token.value = ""
     adminInfo.value = {}
-    console.log("管理员信息清除了");
+    // console.log("管理员信息清除了");
   }
 
   return {

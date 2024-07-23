@@ -13,8 +13,5 @@ public class AddGoodsToCartDTO {
 
     private Integer goodsId;//商品id
 
-    private Integer goodsNumber;//商品数量
-
-    private Integer remainingInventory;//剩余库存
 
 }

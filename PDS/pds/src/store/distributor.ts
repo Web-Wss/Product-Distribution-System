@@ -18,7 +18,7 @@ export const useDistributorStore = defineStore("distributor",()=>{
     storage.removeAll()
     token.value = ""
     distributorInfo.value = {}
-    console.log("分销商信息清除了");
+    // console.log("分销商信息清除了");
   }
 
   return {

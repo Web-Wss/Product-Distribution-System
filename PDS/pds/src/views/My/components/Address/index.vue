@@ -49,7 +49,7 @@ const addAddressBtn = async () => {
     isDefault: 0,
   };
   const res = await addAddressApi(addressDTO);
-  console.log(res);
+  // console.log(res);
   if (res.data.code == 200) {
     showNotify({ type: "success", message: res.data.msg });
     addAddressInfo.value.contacts = "";
@@ -68,21 +68,22 @@ const editAddress = ref({
   addressId: 0,
   contacts: "",
   phone: "",
-  address: "",
+  addressInfo: "",
   isDefault: 0,
 });
 const show1 = ref(false);
 const onEdit = (item, index) => {
-  console.log(item);
+  // console.log(item);
+  editAddress.value.userId = userStore.userInfo.userId;
   editAddress.value.addressId = item.id;
   editAddress.value.contacts = item.name;
   editAddress.value.phone = item.tel;
-  editAddress.value.address = item.address;
+  editAddress.value.addressInfo = item.address;
   editAddress.value.isDefault = 0;
   show1.value = true;
 };
 const editAddressBtn = async () => {
-  console.log(editAddress.value);
+  // console.log(editAddress.value);
   const res = await editAddressApi(editAddress.value);
   if (res.data.code == 200) {
     showNotify({ type: "success", message: res.data.msg });
@@ -97,7 +98,7 @@ const onSelect = async (item) => {
   editAddress.value.addressId = item.id;
   editAddress.value.contacts = item.name;
   editAddress.value.phone = item.tel;
-  editAddress.value.address = item.address;
+  editAddress.value.addressInfo = item.address;
   editAddress.value.isDefault = 1;
   const res = await editAddressApi(editAddress.value);
   if (res.data.code == 200) {
@@ -199,7 +200,7 @@ const chosenAddressId = ref(2);
       />
       <van-field
         required
-        v-model="editAddress.address"
+        v-model="editAddress.addressInfo"
         label="收货地址"
         placeholder="请输入收货地址"
       />

@@ -27,7 +27,7 @@ public class Goods {
 
     private String goodsCompany;//商品单位
 
-    private Integer goodsTotalInventory;//商品库存
+//    private Integer goodsTotalInventory;//商品库存
 
     private String goodsImg;//商品图片
 
@@ -40,11 +40,9 @@ public class Goods {
     private Integer isDelete;//是否删除
 
     @TableField(exist = false)
+    private GoodsInventory goodsInventory;//库存字段
+
+    @TableField(exist = false)
     private GoodsClassification goodsClassification;
-//    库存字段
-    @TableField(exist = false)
-    private Integer soldQuantity;//已售数量
-    @TableField(exist = false)
-    private Integer remainingInventory;//剩余库存
 
 }

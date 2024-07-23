@@ -5,7 +5,8 @@ import {
   updateorderstatusApi,
 } from "@/apis/admin";
 import { onMounted, ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+const router = useRouter();
 // 获取参数
 const route = useRoute();
 const activeNames = ref("1");
@@ -17,7 +18,7 @@ const userOrderList = ref([]);
 const getUserOrderList = async () => {
   const res = await getuserinfobyidApi(userId.value);
   userOrderList.value = res.data.data;
-  console.log(userOrderList.value);
+  // console.log(userOrderList.value);
 };
 
 // 状态
@@ -31,12 +32,12 @@ const columns = [
 const fieldValue = ref(["已下单", "分拣中", "配送中", "已完成"]);
 const onConfirm = async ({ selectedOptions }) => {
   // 触发修改状态
-  console.log(selectedOptions[0].value, EditOrdersId.value);
+  // console.log(selectedOptions[0].value, EditOrdersId.value);
   const res = await updateorderstatusApi(
     EditOrdersId.value,
     selectedOptions[0].value
   );
-  console.log(res);
+  // console.log(res);
   getUserOrderList();
 
   showPicker.value = false;
@@ -48,7 +49,17 @@ const editComplate = async () => {
   const res = await setordercompleteApi(EditOrdersId.value, checked.value);
   getUserOrderList();
 
-  console.log(res);
+  // console.log(res);
+};
+
+// 去订单详情
+const goOrderDetail = () => {
+  router.push({
+    path: "/orderDetail",
+    query: {
+      ordersId: EditOrdersId.value,
+    },
+  });
 };
 
 onMounted(() => {
@@ -133,7 +144,9 @@ onMounted(() => {
               </van-dialog>
               <br />
               <br />
-              <van-button type="primary" size="small">查看订单详情</van-button>
+              <van-button type="primary" size="small" @click="goOrderDetail"
+                >查看订单详情</van-button
+              >
             </div>
           </van-collapse-item>
         </van-collapse>

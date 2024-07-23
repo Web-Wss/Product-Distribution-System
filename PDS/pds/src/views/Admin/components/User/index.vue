@@ -11,7 +11,7 @@ const userList = ref([]);
 // 获取用户列表
 const getUserList = async () => {
   const res = await getuserlistApi();
-  console.log(res);
+  // console.log(res);
   res.data.data.forEach((item) => {
     item.tel = item.phone;
     item.name = item.username;
@@ -20,7 +20,7 @@ const getUserList = async () => {
 };
 
 const goOrder = (item) => {
-  console.log(item);
+  // console.log(item);
   router.push({
     path: "/auserorder",
     query: {

@@ -4,6 +4,7 @@ import { useRouter } from "vue-router";
 
 import { useDistributorStore } from "@/store/distributor";
 import { distributorLoginApi } from "@/apis/distributor";
+import storage from "@/utils/storage";
 const distributorStore = useDistributorStore();
 
 const router = useRouter();
@@ -15,6 +16,7 @@ const form = ref({
 
 // 提交表单
 const onSubmit = async () => {
+  storage.removeAll();
   showLoadingToast({
     message: "登录中...",
     forbidClick: true,
@@ -65,6 +67,7 @@ const onSubmit = async () => {
         v-model="form.password"
         name="password"
         label="密码"
+        type="password"
         placeholder="请输入登录密码"
         :rules="[{ required: true, message: '请输入登录密码' }]"
       />

@@ -4,6 +4,7 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 
 import { useUserStore } from "@/store/user";
+import storage from "@/utils/storage";
 const userStore = useUserStore();
 
 const router = useRouter();
@@ -15,18 +16,22 @@ const form = ref({
 
 // 提交表单
 const onSubmit = async () => {
+  storage.removeAll();
   showLoadingToast({
     message: "登录中...",
     forbidClick: true,
     duration: 2000,
   });
   const res = await userLoginApi(form.value);
-  console.log(res);
+  // console.log(res);
   if (res.data.code === 400) {
-    // console.log("登录失败", res.data.msg);
     showFailToast(res.data.msg);
   } else {
-    userStore.setUserInfo(res.data.data.token, res.data.data.user);
+    userStore.setUserInfo(
+      res.data.data.token,
+      res.data.data.user,
+      res.data.data.role
+    );
     showSuccessToast("登录成功，正在跳转页面！");
     setTimeout(() => {
       router.replace("/");
@@ -73,6 +78,14 @@ const onSubmit = async () => {
         >
       </div>
     </van-form>
+
+    <!-- 其他登录 -->
+    <div class="other">
+      <div class="register">
+        <span @click="router.push('/dlogin')">分销商登录</span>
+        <span @click="router.push('/alogin')">管理员登录</span>
+      </div>
+    </div>
   </div>
 </template>
 

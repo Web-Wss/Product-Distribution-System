@@ -21,8 +21,8 @@ const getInfo = async () => {
     res.data.data.website.websitePath +
     "?distributorId=" +
     distributorStore.distributorInfo.distributorId;
-  console.log(res);
-  console.log(text.value);
+  // console.log(res);
+  // console.log(text.value);
 };
 
 onMounted(() => {

@@ -2,11 +2,13 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.pds_api.mapper.CartMapper">
+<mapper namespace="com.example.pds_api.mapper.UserMapper">
 
-<!--      //    获取购物车列表根据用户id
-    List<Cart> getCartListByUserId(Integer userId);  -->
-    <resultMap id="getCartListByUserIdMap" type="Cart">
+
+<!--    //    获取购物车已选中商品信息
+    List<Cart> getCartSelectedGoods(Integer userId);
+    -->
+    <resultMap id="getCartSelectedGoodsMap" type="Cart">
         <id property="cartId" column="cart_id"></id>
         <result property="userId" column="user_id"></result>
         <result property="goodsId" column="goods_id"></result>
@@ -27,35 +29,12 @@
             <result property="createTime" column="create_time"></result>
             <result property="isDelete" column="is_delete"></result>
         </collection>
-        <collection property="goodsInventory" ofType="GoodsInventory">
-            <id property="goodsInventoryId" column="goods_inventory_id"></id>
-            <id property="goodsId" column="goods_id"></id>
-            <result property="goodsInventorySum" column="goods_inventory_sum"></result>
-        </collection>
     </resultMap>
-    <select id="getCartListByUserId" resultMap="getCartListByUserIdMap">
+    <select id="getCartSelectedGoods" resultMap="getCartSelectedGoodsMap">
         SELECT * FROM cart c
-        LEFT JOIN goods g ON g.goods_id = c.goods_id
-        LEFT JOIN goods_inventory gi on gi.goods_id = c.goods_id
-        WHERE c.user_id =  #{userId}
+        LEFT JOIN goods g on g.goods_id = c.goods_id
+        WHERE c.user_id = #{userId} AND c.goods_selected_status = 1
     </select>
-
-
-
-<!--     //    获取购物车总价根据用户id
-    Integer getCartTotalPriceByUserId(Integer userId);  -->
-    <select id="getCartTotalPriceByUserId" resultType="int">
-        SELECT
-            SUM(CASE WHEN c.goods_selected_status = 1 THEN g.goods_price * c.goods_number ELSE 0 END) AS total_price
-        FROM
-            cart c
-                INNER JOIN
-            goods g ON c.goods_id = g.goods_id
-        WHERE
-            c.goods_selected_status = 1 and c.user_id = #{userId}
-    </select>
-
-
 
 
 </mapper>

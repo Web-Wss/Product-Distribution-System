@@ -1,14 +1,13 @@
 package com.example.pds_api.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pds_api.mapper.*;
 import com.example.pds_api.model.*;
+import com.example.pds_api.model.DTO.DistributorDTO;
 import com.example.pds_api.model.DTO.GoodsDTO;
 import com.example.pds_api.model.VO.DistributorVO;
 import com.example.pds_api.service.AdministratorsService;
 import com.example.pds_api.utils.GetSevenDate;
-import com.example.pds_api.utils.JWTUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -20,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service
-public class AdministratorsServiceImpl extends ServiceImpl<AdministratorsMapper, Administrators> implements AdministratorsService {
+public class AdministratorsServiceImpl implements AdministratorsService {
 
     @Resource
     private AdministratorsMapper administratorsMapper;
@@ -33,27 +32,13 @@ public class AdministratorsServiceImpl extends ServiceImpl<AdministratorsMapper,
     @Resource
     private UserMapper userMapper;
     @Resource
+    private GoodsInventoryMapper goodsInventoryMapper;
+    @Resource
     private WebsiteMapper websiteMapper;
     @Resource
     private NoticeMapper noticeMapper;
     @Resource
     private ReductionMapper reductionMapper;
-
-    @Override
-    public HashMap<String, Object> login(String phone, String password) {
-        HashMap<String, Object> map = new HashMap<>();
-        QueryWrapper<Administrators> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("phone", phone)
-                .eq("password", password);
-        Administrators administrators = administratorsMapper.selectOne(queryWrapper);
-        if (administrators != null){
-            String token = JWTUtils.generateToken(phone);
-            map.put("token", token);
-            map.put("administrators", administrators);
-            return map;
-        }
-        return null;
-    }
 
     @Override
     public HashMap<String, Object> getDashboardData() {
@@ -80,13 +65,11 @@ public class AdministratorsServiceImpl extends ServiceImpl<AdministratorsMapper,
         map.put("orderTotalPrice", administratorsMapper.getOrderTotalPrice());
         map.put("date", date);
         map.put("price", price);
-        return map;
-    }
+        return map;    }
 
     @Override
     public List<Goods> getGoodsList() {
-        List<Goods> goods = goodsMapper.selectList(null);
-        return goods;
+        return goodsMapper.selectList(null);
     }
 
     @Override
@@ -99,19 +82,20 @@ public class AdministratorsServiceImpl extends ServiceImpl<AdministratorsMapper,
     public Integer updateGoodsInfo(GoodsDTO goodsDTO) {
         QueryWrapper<Goods> queryWrapper = new QueryWrapper<>();
         Goods goods = new Goods();
+        GoodsInventory goodsInventory = new GoodsInventory();
         goods.setGoodsName(goodsDTO.getGoodsName());
         goods.setGoodsClassificationId(goodsDTO.getGoodsClassificationId());
         goods.setGoodsPrice(goodsDTO.getGoodsPrice());
         goods.setGoodsOldPrice(goodsDTO.getGoodsOldPrice());
         goods.setGoodsCompany(goodsDTO.getGoodsCompany());
         queryWrapper.eq("goods_id", goodsDTO.getGoodsId());
-//        查询该商品已售出数量
-        Integer goodsOutNumber = administratorsMapper.getGoodsOutNumber(goodsDTO.getGoodsId());
-//        设置商品总库存值
-        Integer goodsTotalInventory = goodsOutNumber + goodsDTO.getRemainingInventory();
-        goods.setGoodsTotalInventory(goodsTotalInventory);
+//        修改商品信息
+        goodsMapper.update(goods, queryWrapper);
 //        修改商品库存
-        int update = goodsMapper.update(goods, queryWrapper);
+        QueryWrapper<GoodsInventory> goodsInventoryQueryWrapper = new QueryWrapper<>();
+        goodsInventoryQueryWrapper.eq("goods_id", goodsDTO.getGoodsId());
+        goodsInventory.setGoodsInventorySum(goodsDTO.getGoodsInventorySum());
+        int update = goodsInventoryMapper.update(goodsInventory, goodsInventoryQueryWrapper);
         return update;
     }
 
@@ -125,12 +109,16 @@ public class AdministratorsServiceImpl extends ServiceImpl<AdministratorsMapper,
         HashMap<String, Object> map = new HashMap<>();
 //        获取分销商列表
         List<Distributor> distributors = distributorMapper.selectList(null);
+//        System.out.println("分销商列表"+distributors);
         distributors.forEach(distributor -> {
-            System.out.println("distributorId = " + distributor.getDistributorId());
+//            System.out.println("distributorId = " + distributor.getDistributorId());
 //            通过分销商id查询该分销商已售出商品数量和总销售额
             Long distributor_id = ordersMapper.selectCount(new QueryWrapper<Orders>().eq("distributor_id", distributor.getDistributorId()));
             distributor.setOrderCount(Math.toIntExact(distributor_id));
             Integer distributorTotalOrderAmount = administratorsMapper.getDistributorTotalOrderAmount(distributor.getDistributorId());
+            if (distributorTotalOrderAmount == null){
+                distributorTotalOrderAmount = 0;
+            }
             distributor.setTotalOrderAmount(distributorTotalOrderAmount);
             int commission = distributorTotalOrderAmount * distributor.getCommissionRate();
             distributor.setCommission(commission);
@@ -170,12 +158,12 @@ public class AdministratorsServiceImpl extends ServiceImpl<AdministratorsMapper,
     }
 
     @Override
-    public Integer updateOrderStatusComplete(Integer ordersId, Integer pay) {
+    public Integer updateOrderStatusComplete(Integer ordersId, Integer payType) {
         QueryWrapper<Orders> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("orders_id", ordersId);
         Orders orders = new Orders();
         orders.setOrderStatus(4);
-        orders.setPayType(pay);
+        orders.setPayType(payType);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String time = sdf.format(new Date());
         orders.setCompletionTime(time);
@@ -253,5 +241,44 @@ public class AdministratorsServiceImpl extends ServiceImpl<AdministratorsMapper,
         return update;
     }
 
+    @Override
+    public Distributor getDistributorInfoById(Integer distributorId) {
+        QueryWrapper<Distributor> distributorQueryWrapper = new QueryWrapper<>();
+        distributorQueryWrapper.eq("distributor_id", distributorId);
+        Distributor distributor = distributorMapper.selectOne(distributorQueryWrapper);
+        return distributor;
+    }
 
+    @Override
+    public Integer updateDistributorInfo(DistributorDTO distributorDTO) {
+        QueryWrapper<Distributor> distributorQueryWrapper = new QueryWrapper<>();
+        Distributor distributor = new Distributor();
+        distributorQueryWrapper.eq("distributor_id", distributorDTO.getDistributorId());
+        distributor.setNickname(distributorDTO.getNickname());
+        distributor.setPhone(distributorDTO.getPhone());
+        distributor.setPassword(distributorDTO.getPassword());
+        distributor.setCommissionRate(distributorDTO.getCommissionRate());
+        distributor.setAlreadyWithdrawn(distributorDTO.getAlreadyWithdrawn());
+        int update = distributorMapper.update(distributor, distributorQueryWrapper);
+        return update;
+    }
+
+    @Override
+    public Integer addDistributorInfo(DistributorDTO distributorDTO) {
+        Distributor distributor = new Distributor();
+        distributor.setNickname(distributorDTO.getNickname());
+        distributor.setPhone(distributorDTO.getPhone());
+        distributor.setPassword(distributorDTO.getPassword());
+        distributor.setCommissionRate(distributorDTO.getCommissionRate());
+        distributor.setAlreadyWithdrawn(BigDecimal.valueOf(0));
+        return distributorMapper.insert(distributor);
+    }
+
+    @Override
+    public Integer deleteDistributorInfoById(Integer distributorId) {
+        QueryWrapper<Distributor> distributorQueryWrapper = new QueryWrapper<>();
+        distributorQueryWrapper.eq("distributor_id", distributorId);
+        int delete = distributorMapper.delete(distributorQueryWrapper);
+        return delete;
+    }
 }

@@ -7,15 +7,8 @@ interface LoginParams {
   username: string;
   phone: string;
 }
-interface LoginResponse {
-  code: number;
-  data: {
-    token: string;
-    userInfo: {}
-  };
-  msg: string;
-}
-export function userLoginApi(data: LoginParams):AxiosPromise<LoginResponse> {
+
+export function userLoginApi(data: LoginParams):AxiosPromise<any> {
   return request({
     url: "/login/userlogin",
     method: "post",

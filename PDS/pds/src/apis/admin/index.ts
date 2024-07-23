@@ -4,7 +4,7 @@ import { AxiosPromise } from "axios";
 // 管理员登录
 export function adminloginApi(phone: string,password: string): AxiosPromise<any> {
   return request({
-    url: "/administrators/login",
+    url: "/login/administratorslogin",
     method: "post",
     params: { phone,password },
   });
@@ -43,8 +43,9 @@ interface UpdateGoodsParams {
   goodsPrice: number, //售价
   goodsOldPrice: number, //市场价
   goodsCompany:string, //单位
-  goodsTotalInventory: number, //总库存
-  remainingInventory: number, //剩余库存
+  // goodsTotalInventory: number, //总库存
+  // remainingInventory: number, //剩余库存
+  goodsInventorySum:number
 }
 export function updateGoodsApi(data: UpdateGoodsParams):AxiosPromise<any> {
   return request({
@@ -154,5 +155,41 @@ export function editpasswordApi(password:string): AxiosPromise<any> {
     url: "/administrators/updatepassword",
     method: "post",
     params: { password },
+  });
+}
+
+// 获取分销商信息根据分销商id
+export function getdistributorinfobyidApi(distributorId: number): AxiosPromise<any> {
+  return request({
+    url: "/administrators/getdistributorinfobyid",
+    method: "get",
+    params: { distributorId },
+  });
+}
+
+// 编辑分销商信息根据分销商id
+export function editdistributorinfoApi(data:object): AxiosPromise<any> {
+  return request({
+    url: "/administrators/updatedistributorinfo",
+    method: "post",
+    data,
+  });
+}
+
+// 新增分销商信息
+export function adddistributorApi(data:object): AxiosPromise<any> {
+  return request({
+    url: "/administrators/adddistributorinfo",
+    method: "post",
+    data,
+  });
+}
+
+// 删除分销商信息根据分销商id
+export function deletedistributorApi(distributorId: number): AxiosPromise<any> {
+  return request({
+    url: "/administrators/deletedistributorinfobyid",
+    method: "get",
+    params: { distributorId },
   });
 }

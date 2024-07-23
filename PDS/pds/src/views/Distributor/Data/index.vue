@@ -17,7 +17,7 @@ const getDataBoard = async () => {
   const res = await getDataBoardApi(
     distributorStore.distributorInfo.distributorId
   );
-  console.log(res);
+  // console.log(res);
   if (res.data.code == 200) {
     date.value = res.data.data.date;
     price.value = res.data.data.price;

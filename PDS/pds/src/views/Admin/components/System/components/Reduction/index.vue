@@ -5,7 +5,7 @@ import { editreductionApi, getreductionApi } from "@/apis/admin/index";
 const reductionList = ref([]);
 const getReductionList = async () => {
   const res = await getreductionApi();
-  console.log(res);
+  // console.log(res);
   reductionList.value = res.data.data;
 };
 
@@ -27,7 +27,7 @@ const sendEditBtn = async () => {
     fullConditionPrice.value,
     fullReductionAmount.value
   );
-  console.log(res);
+  // console.log(res);
   getReductionList();
 };
 

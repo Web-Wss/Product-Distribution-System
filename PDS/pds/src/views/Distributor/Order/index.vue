@@ -17,13 +17,13 @@ const getOrderList = async () => {
   const res = await getOrderListByDistributorIdApi(
     distributorStore.distributorInfo.distributorId
   );
-  console.log(res);
+  // console.log(res);
   orderList.value = res.data.data;
 };
 
 // 去订单详情
 const goOrderDetail = (ordersId) => {
-  console.log(ordersId);
+  // console.log(ordersId);
   router.push({ path: "/orderDetail", query: { ordersId: ordersId } });
 };
 

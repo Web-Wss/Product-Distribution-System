@@ -8,11 +8,14 @@ import {
 } from "@/apis/user/home";
 // lodash
 import { debounce } from "lodash";
+import storage from "@/utils/storage";
+import { useRouter } from "vue-router";
+const router = useRouter();
 const userStore = useUserStore();
 const props = defineProps(["classificationId", "searchValue"]);
 // 搜索
 const performSearch = (searchValue) => {
-  console.log("子组件执行搜索", searchValue);
+  // console.log("子组件执行搜索", searchValue);
   searchGoodsApi(searchValue).then((res) => {
     // console.log(res);
     goodsList.value = res.data.data;
@@ -32,7 +35,7 @@ const goodsList = ref([]);
 const getGoodsList = async () => {
   await getGoodsListByClassificationIdApi(props.classificationId).then(
     (res) => {
-      console.log(res);
+      // console.log(res);
       goodsList.value = res.data.data;
     }
   );
@@ -46,49 +49,55 @@ const nobuy = () => {
 };
 
 // 加购面板
-const show = ref(false);
+// const show = ref(false);
 // 加购
-const addCart = (item) => {
-  cartInfo.value = {
-    goodsId: item.goodsId,
-    goodsImg: item.goodsImg,
-    goodsName: item.goodsName,
-    goodsPrice: item.goodsPrice,
-    remainingInventory: item.remainingInventory,
-    goodsNumber: 1,
-  };
-  show.value = true;
-};
-const cartInfo = ref({
-  goodsId: "",
-  goodsImg: "",
-  goodsName: "",
-  goodsPrice: "",
-  remainingInventory: "",
-  goodsNumber: "",
-});
+// const addCart = (item) => {
+//   cartInfo.value = {
+//     goodsId: item.goodsId,
+//     goodsImg: item.goodsImg,
+//     goodsName: item.goodsName,
+//     goodsPrice: item.goodsPrice,
+//     remainingInventory: item.goodsInventory.goodsInventorySum,
+//     goodsNumber: 1,
+//   };
+//   show.value = true;
+// };
+// const cartInfo = ref({
+//   goodsId: "",
+//   goodsImg: "",
+//   goodsName: "",
+//   goodsPrice: "",
+//   remainingInventory: "",
+//   goodsNumber: "",
+// });
 // 面板加购按钮
-const addCartToCart = async () => {
+const addCartBtn = async (item) => {
+  // 判断是否登录，未登录跳转登录
+  const user = storage.get("user");
+  if (user == null) {
+    router.push({ path: "/login" });
+  }
+
   // 加工加购数据
   const AddGoodsToCartData = {
     userId: userStore.userInfo.userId,
-    goodsId: cartInfo.value.goodsId,
-    goodsNumber: cartInfo.value.goodsNumber,
-    remainingInventory: cartInfo.value.remainingInventory,
+    goodsId: item.goodsId,
+    // goodsNumber: cartInfo.value.goodsNumber,
+    // remainingInventory: cartInfo.value.remainingInventory,
   };
   const res = await addGoodsToCartApi(AddGoodsToCartData);
   if (res.data.code === 200) {
     // console.log("加购成功");
     showNotify({ type: "success", message: "加购成功" });
-    show.value = false;
-    cartInfo.value = {
-      goodsId: "",
-      goodsImg: "",
-      goodsName: "",
-      goodsPrice: "",
-      remainingInventory: "",
-      goodsNumber: "",
-    };
+    // show.value = false;
+    // cartInfo.value = {
+    //   goodsId: "",
+    //   goodsImg: "",
+    //   goodsName: "",
+    //   goodsPrice: "",
+    //   remainingInventory: "",
+    //   goodsNumber: "",
+    // };
   }
 };
 
@@ -116,19 +125,21 @@ onMounted(() => {
         <div class="left">
           <div class="price">价格：{{ item.goodsPrice }}元</div>
           <div class="old-price">市场价：{{ item.goodsOldPrice }}元</div>
-          <div class="inventory">剩余库存：{{ item.remainingInventory }}</div>
+          <div class="inventory">
+            剩余库存：{{ item.goodsInventory.goodsInventorySum }}
+          </div>
         </div>
         <div class="right">
           <van-button
-            v-if="item.remainingInventory > 0"
+            v-if="item.goodsInventory.goodsInventorySum > 0"
             class="btn"
             type="success"
             size="small"
-            @click.stop="addCart(item)"
+            @click.stop="addCartBtn(item)"
             >+ 加购</van-button
           >
           <van-button
-            v-if="item.remainingInventory <= 0"
+            v-if="item.goodsInventory.goodsInventorySum <= 0"
             class="btn"
             type="warning"
             size="small"
@@ -141,7 +152,7 @@ onMounted(() => {
   </div>
 
   <!-- 加购面板 -->
-  <van-action-sheet v-model:show="show" title="加购">
+  <!-- <van-action-sheet v-model:show="show" title="加购">
     <div class="content">
       <div class="img">
         <img :src="cartInfo.goodsImg" alt="" />
@@ -169,7 +180,7 @@ onMounted(() => {
         >加入购物车</van-button
       >
     </div>
-  </van-action-sheet>
+  </van-action-sheet> -->
 </template>
 
 <style scoped lang="scss">
@@ -187,7 +198,7 @@ onMounted(() => {
     margin-top: 0.6rem;
     margin-bottom: 0.3rem;
     padding: 0.6rem;
-    width: 40%;
+    width: 45%;
     .img {
       width: 100%;
       img {

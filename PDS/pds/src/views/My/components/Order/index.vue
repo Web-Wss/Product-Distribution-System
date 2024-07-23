@@ -24,11 +24,11 @@ const getOrderList = async (status) => {
   const userId = userStore.userInfo.userId;
   // 获取订单列表
   const res = await getOrderListApi(userId, status);
-  console.log(res);
+  // console.log(res);
   orderList.value = res.data.data;
 };
 const onClickTab = (e) => {
-  console.log(e.name);
+  // console.log(e.name);
 };
 
 // 监听变化发送获取订单请求

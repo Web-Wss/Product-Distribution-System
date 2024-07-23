@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.pds_api.mapper.HomeMapper">
+
+
+<!--        //    获取产品列表
+    List<Goods> getGoodsList(Integer classificationId);-->
+    <resultMap id="getGoodsListMap" type="Goods">
+        <id property="goodsId" column="goods_id"></id>
+        <result property="goodsClassificationId" column="goods_classification_id"></result>
+        <result property="goodsName" column="goods_name"></result>
+        <result property="goodsPrice" column="goods_price"></result>
+        <result property="goodsOldPrice" column="goods_old_price"></result>
+        <result property="goodsCompany" column="goods_company"></result>
+<!--        <result property="goodsTotalInventory" column="goods_total_inventory"></result>-->
+        <result property="goodsImg" column="goods_img"></result>
+        <result property="goodsVideo" column="goods_video"></result>
+        <result property="goodsStatus" column="goods_status"></result>
+        <result property="createTime" column="create_time"></result>
+        <result property="isDelete" column="is_delete"></result>
+        <collection property="goodsInventory" ofType="GoodsInventory">
+            <id property="goodsInventoryId" column="goods_inventory_id"></id>
+            <id property="goodsId" column="goods_id"></id>
+            <result property="goodsInventorySum" column="goods_inventory_sum"></result>
+        </collection>
+    </resultMap>
+    <select id="getGoodsList" resultMap="getGoodsListMap">
+        SELECT * FROM goods g
+        LEFT JOIN goods_inventory gi on gi.goods_id = g.goods_id
+        <if test="classificationId != 0">
+            WHERE g.goods_classification_id = #{classificationId}
+        </if>
+    </select>
+
+
+<!--        //    查询商品详情根据id
+    Goods getGoodsInfoById(Integer goodsId);-->
+    <resultMap id="getGoodsInfoByIdMap" type="Goods">
+        <id property="goodsId" column="goods_id"></id>
+        <result property="goodsClassificationId" column="goods_classification_id"></result>
+        <result property="goodsName" column="goods_name"></result>
+        <result property="goodsPrice" column="goods_price"></result>
+        <result property="goodsOldPrice" column="goods_old_price"></result>
+        <result property="goodsCompany" column="goods_company"></result>
+<!--        <result property="goodsTotalInventory" column="goods_total_inventory"></result>-->
+        <result property="goodsImg" column="goods_img"></result>
+        <result property="goodsVideo" column="goods_video"></result>
+        <result property="goodsStatus" column="goods_status"></result>
+        <result property="createTime" column="create_time"></result>
+        <result property="isDelete" column="is_delete"></result>
+        <collection property="goodsInventory" ofType="GoodsInventory">
+            <id property="goodsInventoryId" column="goods_inventory_id"></id>
+            <id property="goodsId" column="goods_id"></id>
+            <result property="goodsInventorySum" column="goods_inventory_sum"></result>
+        </collection>
+    </resultMap>
+    <select id="getGoodsInfoById" resultMap="getGoodsInfoByIdMap">
+        SELECT * FROM goods g
+        LEFT JOIN goods_inventory gi on gi.goods_id = g.goods_id
+        WHERE g.goods_id = #{goodsId}
+    </select>
+
+
+
+<!--      //    搜索商品模糊搜索
+    List<Goods> searchGoods(String goodsName);  -->
+    <resultMap id="searchGoodsMap" type="Goods">
+        <id property="goodsId" column="goods_id"></id>
+        <result property="goodsClassificationId" column="goods_classification_id"></result>
+        <result property="goodsName" column="goods_name"></result>
+        <result property="goodsPrice" column="goods_price"></result>
+        <result property="goodsOldPrice" column="goods_old_price"></result>
+        <result property="goodsCompany" column="goods_company"></result>
+<!--        <result property="goodsTotalInventory" column="goods_total_inventory"></result>-->
+        <result property="goodsImg" column="goods_img"></result>
+        <result property="goodsVideo" column="goods_video"></result>
+        <result property="goodsStatus" column="goods_status"></result>
+        <result property="createTime" column="create_time"></result>
+        <result property="isDelete" column="is_delete"></result>
+        <collection property="goodsInventory" ofType="GoodsInventory">
+            <id property="goodsInventoryId" column="goods_inventory_id"></id>
+            <id property="goodsId" column="goods_id"></id>
+            <result property="goodsInventorySum" column="goods_inventory_sum"></result>
+        </collection>
+    </resultMap>
+    <select id="searchGoods" resultMap="searchGoodsMap">
+        SELECT * FROM goods g
+        LEFT JOIN goods_inventory gi on gi.goods_id = g.goods_id
+        WHERE g.goods_name LIKE #{goodsName}
+    </select>
+
+
+</mapper>

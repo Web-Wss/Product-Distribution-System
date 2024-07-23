@@ -4,7 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.pds_api.mapper.OrdersMapper">
 
-<!--    获取订单详情
+
+    <!--    获取订单详情
     OrderList getOrderListByOrderId(Integer orderId);
 -->
     <resultMap id="getOrderListByOrderIdMap" type="OrderList">
@@ -43,24 +44,23 @@
             <result property="goodsPrice" column="goods_price"></result>
             <result property="goodsOldPrice" column="goods_old_price"></result>
             <result property="goodsCompany" column="goods_company"></result>
-            <result property="goodsTotalInventory" column="goods_total_inventory"></result>
+<!--            <result property="goodsTotalInventory" column="goods_total_inventory"></result>-->
             <result property="goodsImg" column="goods_img"></result>
             <result property="goodsVideo" column="goods_video"></result>
             <result property="goodsStatus" column="goods_status"></result>
             <result property="createTime" column="create_time"></result>
             <result property="isDelete" column="is_delete"></result>
-            <result property="soldQuantity" column="sold_quantity"></result>
-            <result property="remainingInventory" column="remaining_inventory"></result>
+<!--            <result property="soldQuantity" column="sold_quantity"></result>-->
+<!--            <result property="remainingInventory" column="remaining_inventory"></result>-->
         </collection>
     </resultMap>
     <select id="getOrderListByOrderId" resultMap="getOrderListByOrderIdMap">
         SELECT * FROM orders os
-        LEFT JOIN address a ON a.address_id = os.address_id
-        LEFT JOIN order_list ol ON ol.orders_id = os.orders_id
-        LEFT JOIN goods g ON ol.goods_id = g.goods_id
+                          LEFT JOIN address a ON a.address_id = os.address_id
+                          LEFT JOIN order_list ol ON ol.orders_id = os.orders_id
+                          LEFT JOIN goods g ON ol.goods_id = g.goods_id
         WHERE os.orders_id = #{ordersId}
     </select>
-
 
 
 </mapper>

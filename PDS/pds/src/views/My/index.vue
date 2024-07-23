@@ -3,6 +3,8 @@ import TabBar from "@/components/TabBar/index.vue";
 import { useUserStore } from "@/store/user";
 import storage from "@/utils/storage";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+const router = useRouter();
 
 const userStore = useUserStore();
 // 用户登录信息
@@ -11,7 +13,9 @@ const { username, phone } = user;
 
 // 退出登录
 const logout = () => {
-  userStore.clearUserInfo();
+  router.replace({
+    path: "/login",
+  });
 };
 </script>
 

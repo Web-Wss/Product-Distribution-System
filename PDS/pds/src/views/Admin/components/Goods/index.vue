@@ -8,7 +8,7 @@ const goodsList = ref([]);
 // 获取商品列表
 const getGoodsList = async () => {
   const res = await getgoodslistApi();
-  console.log(res);
+  // console.log(res);
   if (res.data.code == 200) {
     goodsList.value = res.data.data;
   }
@@ -22,22 +22,25 @@ const editGoodsInfo = ref({
   goodsPrice: "10", //售价
   goodsOldPrice: "15", //市场价
   goodsCompany: "/个", //单位
-  goodsTotalInventory: "58", //总库存
-  remainingInventory: "5", //剩余库存
+  // goodsTotalInventory: "58", //总库存
+  // remainingInventory: "5", //剩余库存
+  goodsInventorySum: "0",
 });
 const show = ref(false);
 const showEdit = async (id) => {
   // 根据id获取商品信息
   const res = await getgoodsinfoApi(id);
-  console.log(res);
+  // console.log(res);
   if (res.data.code == 200) {
     editGoodsInfo.value = res.data.data;
+    editGoodsInfo.value.goodsInventorySum =
+      res.data.data.goodsInventory.goodsInventorySum;
     show.value = true;
   }
 };
 const editGoodsIngoBtn = async () => {
   const res = await updateGoodsApi(editGoodsInfo.value);
-  console.log(res);
+  // console.log(res);
   if (res.data.code == 200) {
     showNotify({ type: "success", message: "商品信息修改成功" });
     show.value = false;
@@ -123,16 +126,16 @@ onMounted(() => {
           placeholder="商品单位"
           :rules="[{ required: true, message: '请输入商品单位' }]"
         />
-        <van-field
+        <!-- <van-field
           v-model="editGoodsInfo.goodsTotalInventory"
           disabled
           name="商品总库存"
           label="商品总库存"
           placeholder="商品总库存"
           :rules="[{ required: true, message: '请输入商品总库存' }]"
-        />
+        /> -->
         <van-field
-          v-model="editGoodsInfo.remainingInventory"
+          v-model="editGoodsInfo.goodsInventorySum"
           name="商品剩余库存"
           label="商品剩余库存"
           placeholder="商品剩余库存"

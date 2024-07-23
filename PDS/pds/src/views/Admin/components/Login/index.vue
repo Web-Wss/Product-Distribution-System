@@ -4,6 +4,7 @@ import { useRouter } from "vue-router";
 
 import { useAdminStore } from "@/store/admin";
 import { adminloginApi } from "@/apis/admin/index";
+import storage from "@/utils/storage";
 const adminStore = useAdminStore();
 const router = useRouter();
 
@@ -14,6 +15,7 @@ const form = ref({
 
 // 提交表单
 const onSubmit = async () => {
+  storage.removeAll();
   showLoadingToast({
     message: "登录中...",
     forbidClick: true,
@@ -60,6 +62,7 @@ const onSubmit = async () => {
         v-model="form.password"
         name="password"
         label="密码"
+        type="password"
         placeholder="请输入登录密码"
         :rules="[{ required: true, message: '请输入登录密码' }]"
       />

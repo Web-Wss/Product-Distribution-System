@@ -50,7 +50,7 @@ const systemInfo = ref({
 });
 const getSystemInfo = async () => {
   const res = await getsysteminfoApi();
-  console.log(res);
+  // console.log(res);
   systemInfo.value = res.data.data;
   tel.value = res.data.data.administrators.phone;
   tel.name = res.data.data.administrators.nickname;
@@ -98,7 +98,7 @@ const editPasswordBtn = async () => {
 
 // 去满减规则页面
 const goReduction = () => {
-  console.log("去满减规则页面");
+  // console.log("去满减规则页面");
   router.push({
     path: "/areduction",
   });
@@ -106,7 +106,7 @@ const goReduction = () => {
 
 // 退出登录
 const logout = () => {
-  useAdmin.clearAdminInfo;
+  useAdmin.clearAdminInfo();
   router.replace({
     path: "/login",
   });
@@ -116,7 +116,7 @@ onMounted(() => {
   getSystemInfo();
 });
 const onEdit = () => {
-  console.log("点击了");
+  // console.log("点击了");
 };
 </script>
 

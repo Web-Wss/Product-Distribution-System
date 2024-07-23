@@ -9,15 +9,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@TableName("administrators")
-public class Administrators {
+@TableName("goods_inventory")
+public class GoodsInventory {
+
     @TableId
-    private Integer administratorsId;//管理员id
+    private Integer goodsInventoryId;//库存id
 
-    private String nickname;//管理员昵称
+    private Integer goodsId;//商品id
 
-    private String phone;//管理员手机号
-
-    private String password;//管理员密码
+    private Integer goodsInventorySum;//库存数量
 
 }

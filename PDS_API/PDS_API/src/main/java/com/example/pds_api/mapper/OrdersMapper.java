@@ -7,7 +7,6 @@ import com.example.pds_api.model.Orders;
 import java.util.List;
 
 public interface OrdersMapper extends BaseMapper<Orders> {
-
     List<OrderList> getOrderListByOrderId(Integer ordersId);
 
 }

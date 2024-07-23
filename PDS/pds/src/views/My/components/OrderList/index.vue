@@ -12,7 +12,7 @@ const orderStatus = ["已下单", "分拣中", "配送中", "已完成", "已取
 
 // 去详情
 const goDetail = (e) => {
-  console.log(e.ordersId);
+  // console.log(e.ordersId);
   router.push({
     path: "/orderDetail",
     query: {

@@ -26,9 +26,13 @@ public class Cart {
 
     private Integer isSelected;//是否可以选中
 
+//    商品信息
     @TableField(exist = false)
     private Goods goods;
+
+//    商品库存信息
     @TableField(exist = false)
-    private GoodsClassification goodsClassification;
+    private GoodsInventory goodsInventory;
+
 
 }

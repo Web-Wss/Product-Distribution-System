@@ -26,6 +26,7 @@ export function getGoodsClassificationListApi(): AxiosPromise<GoodsClassificatio
   });
 }
 
+// 获取产品列表根据分类id
 export function getGoodsListByClassificationIdApi(classificationId: number): AxiosPromise<any> {
   return request({
     url: "/home/getgoodslist",
@@ -37,21 +38,8 @@ export function getGoodsListByClassificationIdApi(classificationId: number): Axi
 }
 
 // 查询商品详情根据id
-interface GoodsDetail {
-  goodsId: number,
-  goodsClassificationId: number,
-  goodsName: string,
-  goodsPrice: number,
-  goodsOldPrice: number,
-  goodsCompany: string,
-  goodsTotalInventory: number,
-  goodsImg: string,
-  goodsVideo: string,
-  goodsStatus: number,
-  createTime: string,
-  isDelete: number
-}
-export function getGoodsDetailByIdApi(goodsId: number): AxiosPromise<GoodsDetail> {
+
+export function getGoodsDetailByIdApi(goodsId: number): AxiosPromise<any> {
   return request({
     url: "/home/getgoodsdetailbyid",
     method: "POST",
@@ -61,12 +49,23 @@ export function getGoodsDetailByIdApi(goodsId: number): AxiosPromise<GoodsDetail
   });
 }
 
+// 搜索商品，模糊搜索
+export function searchGoodsApi(goodsName: string): AxiosPromise<any> {
+  return request({
+    url: "/home/searchgoods",
+    method: "POST",
+    params: {
+      goodsName
+    }
+  });
+}
+
 // 添加商品到购物车
 interface AddGoodsToCart {
   userId: number,
   goodsId:number,
-  goodsNum:number
-  remainingInventory:number
+  // goodsNum:number
+  // remainingInventory:number
 }
 export function addGoodsToCartApi(data: AddGoodsToCart): AxiosPromise<any> {
   return request({
@@ -123,27 +122,27 @@ export function deleteCartInfoByCartIdApi(cartId: number): AxiosPromise<any> {
   });
 }
 
-// 搜索商品，模糊搜索
-export function searchGoodsApi(goodsName: string): AxiosPromise<any> {
+// 获取满减规则
+export function getFullReductionRuleApi(): AxiosPromise<any> {
   return request({
-    url: "/home/searchgoods",
-    method: "POST",
+    url: "/goods/getreductionlist",
+    method: "GET",
+  });
+}
+
+// 获取默认收获地址
+export function getDefaultAddressApi(userId:number): AxiosPromise<any> {
+  return request({
+    url: "/goods/getdefaultaddress",
+    method: "GET",
     params: {
-      goodsName
+      userId
     }
   });
 }
 
 // 获取地址列表
-interface AddressList {
-  addressId: number;
-  userId: number;
-  addressInfo: string;
-  contacts: string;
-  phone: string;
-  isDefault: number;
-}
-export function getAddressListApi(userId:number): AxiosPromise<AddressList> {
+export function getAddressListApi(userId:number): AxiosPromise<any> {
   return request({
     url: "/user/getaddresslist",
     method: "GET",
@@ -199,6 +198,7 @@ export function getOrderDetailApi(ordersId:number): AxiosPromise<any> {
 }
 
 // 获取生成订单信息根据用户id
+
 export function getCartListByUserIdAndSelectedStatusApi(userId:number): AxiosPromise<any> {
   return request({
     url: "/goods/getcartlistbyuseridandselectedstatus",
@@ -207,18 +207,10 @@ export function getCartListByUserIdAndSelectedStatusApi(userId:number): AxiosPro
   });
 }
 
-// 获取满减规则
-export function getFullReductionRuleApi(): AxiosPromise<any> {
-  return request({
-    url: "/goods/getreductionlist",
-    method: "GET",
-  });
-}
-
 // 生成订单
 export function createOrderApi(data:object): AxiosPromise<any> {
   return request({
-    url: "/goods/generateorder",
+    url: "/user/generateorder",
     method: "POST",
     data
   });
